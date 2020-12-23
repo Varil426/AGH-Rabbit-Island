@@ -12,7 +12,7 @@ namespace Rabbit_Island
 
         private readonly List<Entity> _entities;
 
-        private Map _worldMap;
+        private Map? _worldMap;
 
         static World()
         {

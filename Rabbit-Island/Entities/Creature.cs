@@ -8,6 +8,7 @@ namespace Rabbit_Island.Entities
     {
         protected Creature(float x, float y) : base(x, y)
         {
+            States = new HashSet<State>();
             // TODO Dodać ustawianie parametrów
         }
 
