@@ -41,7 +41,7 @@ namespace Rabbit_Island
 
         public double TimeRate { get; set; }
 
-        public bool DeathFromOldAge { get; set; }
+        public bool? DeathFromOldAge { get; set; }
 
         public int MaxCreatures { get; set; }
 
@@ -49,9 +49,9 @@ namespace Rabbit_Island
 
         public int PregnancyDuration { get; set; }
 
-        public bool FoodExpires { get; set; }
+        public bool? FoodExpires { get; set; }
 
-        public bool DrawRanges { get; set; }
+        public bool? DrawRanges { get; set; }
 
         public (int, int) MapSize { get; set; }
 

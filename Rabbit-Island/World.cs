@@ -12,7 +12,9 @@ namespace Rabbit_Island
 
         private readonly List<Entity> _entities;
 
-        private Map? _worldMap;
+        private Map _worldMap;
+
+        public Config WorldConfig { get; set; }
 
         static World()
         {
@@ -21,6 +23,7 @@ namespace Rabbit_Island
         private World()
         {
             _entities = new List<Entity>();
+            _worldMap = new Map((1000, 1000));
         }
 
         public static World Instance
@@ -29,11 +32,6 @@ namespace Rabbit_Island
             {
                 return _instance;
             }
-        }
-
-        public void SetMap((int, int) mapSize)
-        {
-            _worldMap = new Map(mapSize);
         }
 
         public void AddEntity(Entity entity)
@@ -73,6 +71,10 @@ namespace Rabbit_Island
             }).ToList();
         }
 
-        public Map WorldMap => _worldMap;
+        public Map WorldMap
+        {
+            get => _worldMap;
+            set => _worldMap = value;
+        }
     }
 }
