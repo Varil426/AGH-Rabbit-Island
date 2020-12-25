@@ -39,6 +39,8 @@ namespace Rabbit_Island
             WolvesConfig = new CreatureConfig<Entities.Wolf>();
         }
 
+        private (int, int) _mapSize;
+
         public double TimeRate { get; set; }
 
         public bool? DeathFromOldAge { get; set; }
@@ -53,7 +55,20 @@ namespace Rabbit_Island
 
         public bool? DrawRanges { get; set; }
 
-        public (int, int) MapSize { get; set; }
+        public (int, int) MapSize
+        {
+            get => _mapSize;
+
+            set
+            {
+                if (value.Item1 <= 0 || value.Item2 <= 0)
+                {
+                    throw new ArgumentException("Map size should be greater than 0");
+                }
+
+                _mapSize = value;
+            }
+        }
 
         public ICreatureConfig<Entities.Rabbit> RabbitConfig { get; }
 

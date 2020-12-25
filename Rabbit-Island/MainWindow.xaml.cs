@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rabbit_Island.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,12 +74,49 @@ namespace Rabbit_Island
             return config;
         }
 
+        private (float, float) GenerateRandomPosition()
+        {
+            Random random = new Random();
+            float x = random.Next(world.WorldConfig.MapSize.Item1);
+            float y = random.Next(world.WorldConfig.MapSize.Item2);
+            return (x, y);
+        }
+
+        private void CreateEntities()
+        {
+            // Create Fruits
+            for (int i = 0; i < world.WorldConfig.FruitsPerDay; i++)
+            {
+                var position = GenerateRandomPosition();
+                world.AddEntity(new Fruit(position.Item1, position.Item2));
+            }
+            // Create Rabbits
+            for (int i = 0; i < world.WorldConfig.RabbitConfig.InitialPopulation; i++)
+            {
+                var position = GenerateRandomPosition();
+                world.AddEntity(new Rabbit(position.Item1, position.Item2));
+            }
+            // Create Wolves
+            for (int i = 0; i < world.WorldConfig.WolvesConfig.InitialPopulation; i++)
+            {
+                var position = GenerateRandomPosition();
+                world.AddEntity(new Wolf(position.Item1, position.Item2));
+            }
+        }
+
         private void RunSimulation(object sender, RoutedEventArgs e)
         {
             this.IsEnabled = false;
 
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
+
+            CreateEntities();
+
+            var simulationWindow = new SimulationWindow();
+            var graphsWindow = new GraphsWindow();
+            graphsWindow.Show();
+            simulationWindow.Show();
         }
     }
 }
