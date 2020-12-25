@@ -3,10 +3,66 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rabbit_Island"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="Rabbit Island Simulation AGH" MinHeight="500" Height="600" MinWidth="750" Width="1000">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Stretch" Margin="10">
+            <GroupBox.Header>Rabbits Config</GroupBox.Header>
+            <StackPanel>
+                <Label>Initial Population</Label>
+                <TextBox Name="RabbitsInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="10" />
+                <Label>Min Children</Label>
+                <TextBox Name="RabbitsMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
+                <Label>Max Children</Label>
+                <TextBox Name="RabbitsMaxChildrenInput" PreviewTextInput="NumericTextBox" Text="6" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" Margin="10">
+            <GroupBox.Header>Wolves Config</GroupBox.Header>
+            <StackPanel>
+                <Label>Initial Population</Label>
+                <TextBox Name="WolvesInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="10" />
+                <Label>Min Children</Label>
+                <TextBox Name="WolvesMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
+                <Label>Max Children</Label>
+                <TextBox Name="WolvesMaxChildrenInput" PreviewTextInput="NumericTextBox" Text="6" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <GroupBox.Header>General Config</GroupBox.Header>
+            <StackPanel>
+                <Label>Time Rate</Label>
+                <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" Text="1000" />
+                <Label>Death From Old Age</Label>
+                <CheckBox Name="DeathFromOldAgeInput" IsChecked="True" />
+                <Label>Max Creatures</Label>
+                <TextBox Name="MaxCreaturesInput" PreviewTextInput="NumericTextBox" Text="500" />
+                <Label>Fruits Per Day</Label>
+                <TextBox Name="FruitsPerDayInput" PreviewTextInput="NumericTextBox" Text="60" />
+                <Label>Map Size</Label>
+                <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="1000" />
+                <Label>Pregnancy Duration (Days)</Label>
+                <TextBox Name="PregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
+                <Label>Food Expires</Label>
+                <CheckBox Name="FoodExpiresInput" IsChecked="True" />
+                <Label>Draw Ranges</Label>
+                <CheckBox Name="DrawRangesInput" IsChecked="False" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Grid.Row="0" BorderThickness="0">
+            <Image Source="/Rabbit-Island;component/Assets/AGH_LOGO.jpg" />
+        </GroupBox>
+        <GroupBox Grid.Column="2" Grid.Row="1" Margin="100" BorderThickness="0">
+            <Button>Run</Button>
+        </GroupBox>
     </Grid>
 </Window>

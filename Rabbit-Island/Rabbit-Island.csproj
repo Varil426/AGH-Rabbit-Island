@@ -8,4 +8,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\AGH_Logo.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AGH_Logo.jpg" />
+  </ItemGroup>
+
 </Project>

@@ -47,13 +47,13 @@ namespace Rabbit_Island
 
         public int FruitsPerDay { get; set; }
 
-        public int PregnacyDurationDays { get; set; }
+        public int PregnancyDuration { get; set; }
 
         public bool FoodExpires { get; set; }
 
         public bool DrawRanges { get; set; }
 
-        public int MyProperty { get; set; }
+        public (int, int) MapSize { get; set; }
 
         public ICreatureConfig<Entities.Rabbit> RabbitConfig { get; }
 
