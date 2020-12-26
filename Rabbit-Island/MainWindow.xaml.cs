@@ -1,19 +1,8 @@
 ﻿using Rabbit_Island.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Rabbit_Island
 {
@@ -46,12 +35,12 @@ namespace Rabbit_Island
             var wolvesMaxChildren = int.Parse(WolvesMaxChildrenInput.Text);
 
             var timeRate = double.Parse(TimeRateInput.Text);
-            var deathFromOldAge = DeathFromOldAgeInput.IsChecked;
+            var deathFromOldAge = (bool)DeathFromOldAgeInput.IsChecked!;
             var maxCreatures = int.Parse(MaxCreaturesInput.Text);
             var fruitsPerDay = int.Parse(FruitsPerDayInput.Text);
             var mapSize = int.Parse(MapSizeInput.Text);
             var pregnancyDuration = int.Parse(PregnancyDurationInput.Text);
-            var drawRanges = DrawRangesInput.IsChecked;
+            var drawRanges = (bool)DrawRangesInput.IsChecked!;
             var config = new Config()
             {
                 TimeRate = timeRate,
@@ -77,8 +66,8 @@ namespace Rabbit_Island
         private (float, float) GenerateRandomPosition()
         {
             Random random = new Random();
-            float x = random.Next(world.WorldConfig.MapSize.Item1);
-            float y = random.Next(world.WorldConfig.MapSize.Item2);
+            float x = random.Next(world.WorldMap.Size.Item1);
+            float y = random.Next(world.WorldMap.Size.Item2);
             return (x, y);
         }
 
@@ -117,6 +106,8 @@ namespace Rabbit_Island
             var graphsWindow = new GraphsWindow();
             graphsWindow.Show();
             simulationWindow.Show();
+
+            // TODO Start simulation
         }
     }
 }

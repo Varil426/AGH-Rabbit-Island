@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows.Controls;
 
 namespace Rabbit_Island.Entities
 {
-    internal abstract class Entity
+    internal abstract class Entity : IWPFDrawable
     {
         protected Entity(float x, float y)
         {
@@ -17,5 +16,7 @@ namespace Rabbit_Island.Entities
         public DateTime CreateAt { get; }
 
         public bool IsHidden { get; set; }
+
+        public abstract void DrawSelf(Canvas canvas);
     }
 }

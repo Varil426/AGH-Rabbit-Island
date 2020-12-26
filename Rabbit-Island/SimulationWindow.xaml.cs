@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Rabbit_Island.Entities;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Rabbit_Island
 {
@@ -19,9 +13,50 @@ namespace Rabbit_Island
     /// </summary>
     public partial class SimulationWindow : Window
     {
+        private World world = World.Instance;
+
+        private Canvas canvas;
+
         public SimulationWindow()
         {
             InitializeComponent();
+            canvas = new Canvas
+            {
+                Width = world.WorldMap.Size.Item1,
+                Height = world.WorldMap.Size.Item2,
+                Background = Brushes.Green
+            };
+            Content.Children.Add(canvas);
+
+            var th = new Thread(DrawSimulation)
+            {
+                IsBackground = true
+            };
+            th.Start();
+        }
+
+        public void DrawSimulation()
+        {
+            var timeout = 1000 / 30;
+            while (true)
+            {
+                try
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        canvas.Children.Clear();
+
+                        foreach (var entity in world.Entities)
+                        {
+                            entity.DrawSelf(canvas);
+                        }
+                    });
+                    Thread.Sleep(timeout);
+                }
+                catch (System.Threading.Tasks.TaskCanceledException)
+                {
+                }
+            }
         }
     }
 }

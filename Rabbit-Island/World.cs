@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Rabbit_Island
 {
@@ -24,6 +23,7 @@ namespace Rabbit_Island
         {
             _entities = new List<Entity>();
             _worldMap = new Map((1000, 1000));
+            WorldConfig = new Config();
         }
 
         public static World Instance
@@ -76,5 +76,7 @@ namespace Rabbit_Island
             get => _worldMap;
             set => _worldMap = value;
         }
+
+        public List<Entity> Entities => _entities;
     }
 }

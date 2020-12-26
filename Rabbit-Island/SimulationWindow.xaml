@@ -6,7 +6,5 @@
         xmlns:local="clr-namespace:Rabbit_Island"
         mc:Ignorable="d"
         Title="SimulationWindow" Height="600" Width="600">
-    <Grid>
-        <Image />
-    </Grid>
+    <Grid Name="Content" Margin="10" />
 </Window>

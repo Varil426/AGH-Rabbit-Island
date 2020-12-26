@@ -49,7 +49,7 @@
                 <Label>Fruits Per Day</Label>
                 <TextBox Name="FruitsPerDayInput" PreviewTextInput="NumericTextBox" Text="60" />
                 <Label>Map Size</Label>
-                <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="1000" />
+                <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="500" />
                 <Label>Pregnancy Duration (Days)</Label>
                 <TextBox Name="PregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
                 <Label>Food Expires</Label>
