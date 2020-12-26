@@ -9,7 +9,10 @@ namespace Rabbit_Island.Entities
         protected Creature(float x, float y) : base(x, y)
         {
             States = new HashSet<State>();
-            // TODO Dodać ustawianie parametrów
+
+            Random random = new Random();
+            Array values = Enum.GetValues(typeof(GenderType));
+            Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
         }
 
         public enum State
@@ -31,19 +34,23 @@ namespace Rabbit_Island.Entities
             Female
         }
 
+        public float MaxHealth { get; protected set; }
         public float Health { get; set; }
 
+        public float MaxEnergy { get; protected set; }
         public float Energy { get; set; }
 
-        public float SightRange { get; }
+        public float SightRange { get; protected set; }
 
-        public float InteractionRange { get; }
+        public float InteractionRange { get; protected set; }
+
+        public float MovementSpeed { get; protected set; }
 
         public GenderType Gender { get; }
 
         public HashSet<State> States { get; }
 
-        public DateTime DeathAt { get; }
+        public DateTime DeathAt { get; protected set; }
 
         public abstract void Act();
     }

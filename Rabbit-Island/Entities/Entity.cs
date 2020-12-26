@@ -16,8 +16,6 @@ namespace Rabbit_Island.Entities
 
         public DateTime CreateAt { get; }
 
-        public String Name { get; set; }
-
         public bool IsHidden { get; set; }
     }
 }

@@ -8,7 +8,13 @@ namespace Rabbit_Island.Entities
     {
         public Rabbit(float x, float y) : base(x, y)
         {
-            // TODO Dodać ustawianie fear
+            Random random = new Random();
+            MaxHealth = random.Next(90, 110);
+            MaxEnergy = random.Next(90, 110);
+            SightRange = random.Next(50);
+            MovementSpeed = random.Next(5, 20);
+            InteractionRange = random.Next(10);
+            Fear = random.Next(10);
         }
 
         public int Fear { get; }

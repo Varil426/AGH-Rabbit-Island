@@ -104,7 +104,7 @@ namespace Rabbit_Island
             }
         }
 
-        private void RunSimulation(object sender, RoutedEventArgs e)
+        private void StartSimulation(object sender, RoutedEventArgs e)
         {
             this.IsEnabled = false;
 

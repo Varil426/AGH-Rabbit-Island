@@ -62,7 +62,7 @@
             <Image Source="/Rabbit-Island;component/Assets/AGH_LOGO.jpg" />
         </GroupBox>
         <GroupBox Grid.Column="2" Grid.Row="1" Margin="100" BorderThickness="0">
-            <Button Click="RunSimulation">Run</Button>
+            <Button Click="StartSimulation">Run</Button>
         </GroupBox>
     </Grid>
 </Window>
