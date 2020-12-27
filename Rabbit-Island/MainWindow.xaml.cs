@@ -107,7 +107,7 @@ namespace Rabbit_Island
             graphsWindow.Show();
             simulationWindow.Show();
 
-            // TODO Start simulation
+            world.StartSimulation();
         }
     }
 }

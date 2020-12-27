@@ -21,8 +21,8 @@ namespace Rabbit_Island.Entities
             };
             fruitCanvas.Children.Add(rectangle);
             canvas.Children.Add(fruitCanvas);
-            Canvas.SetLeft(fruitCanvas, Position.Item1);
-            Canvas.SetTop(fruitCanvas, Position.Item2);
+            Canvas.SetLeft(fruitCanvas, Position.X);
+            Canvas.SetTop(fruitCanvas, Position.Y);
         }
     }
 }

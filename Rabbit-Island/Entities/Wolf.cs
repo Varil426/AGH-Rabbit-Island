@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,7 +25,17 @@ namespace Rabbit_Island.Entities
 
         public override void Act()
         {
-            throw new NotImplementedException();
+            // TODO Improve this
+            while (true)
+            {
+                var destination = new Vector2(100, 100);
+                var distance = Vector2.Distance(Position, destination);
+                Move(destination);
+                // TODO Move this sleep or make dependent on something
+                Thread.Sleep(50);
+                if (distance < 5)
+                    break;
+            }
         }
 
         public override void DrawSelf(Canvas canvas)
@@ -50,8 +62,8 @@ namespace Rabbit_Island.Entities
                 Canvas.SetTop(sightRange, -SightRange / 2);
             }
             canvas.Children.Add(wolfCanvas);
-            Canvas.SetLeft(wolfCanvas, Position.Item1);
-            Canvas.SetTop(wolfCanvas, Position.Item2);
+            Canvas.SetLeft(wolfCanvas, Position.X);
+            Canvas.SetTop(wolfCanvas, Position.Y);
         }
     }
 }

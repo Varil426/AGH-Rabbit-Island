@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Threading;
 
 namespace Rabbit_Island
 {
@@ -46,17 +48,25 @@ namespace Rabbit_Island
 
         public void StartSimulation()
         {
-            throw new NotImplementedException();
+            // TODO Move it to fields
+            var threads = new List<Thread>();
+            foreach (ICreature creature in _entities.Where(x => x is ICreature))
+            {
+                var th = new Thread(creature.Act)
+                {
+                    IsBackground = true
+                };
+                threads.Add(th);
+            }
+            threads.ForEach(x => x.Start());
         }
 
         public List<Entity> GetCloseByEntities(Entity entity)
         {
             return _entities.Where(x =>
             {
-                var xDiff = x.Position.Item1 - entity.Position.Item1;
-                var yDiff = x.Position.Item2 - entity.Position.Item2;
-
-                return Math.Sqrt(Math.Pow(xDiff, 2) + Math.Pow(yDiff, 2)) <= 10;
+                var distance = Vector2.Distance(entity.Position, x.Position);
+                return distance <= 10;
             }).ToList();
         }
 
@@ -64,10 +74,8 @@ namespace Rabbit_Island
         {
             return _entities.Where(x =>
             {
-                var xDiff = x.Position.Item1 - creature.Position.Item1;
-                var yDiff = x.Position.Item2 - creature.Position.Item2;
-
-                return Math.Sqrt(Math.Pow(xDiff, 2) + Math.Pow(yDiff, 2)) <= creature.SightRange;
+                var distance = Vector2.Distance(creature.Position, x.Position);
+                return distance <= creature.SightRange;
             }).ToList();
         }
 
