@@ -15,7 +15,9 @@ namespace Rabbit_Island.Entities
         {
             Random random = new Random();
             MaxHealth = random.Next(90, 110);
+            Health = MaxHealth;
             MaxEnergy = random.Next(90, 110);
+            Energy = MaxEnergy;
             SightRange = random.Next(50);
             MovementSpeed = random.Next(5, 20);
             InteractionRange = random.Next(10);
@@ -69,21 +71,21 @@ namespace Rabbit_Island.Entities
             }
         }
 
-        protected override Action Think()
+        protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
+            if (closeByEntities.Find(entity => entity is Fruit) is Fruit fruit)
+            {
+                return new Action(ActionType.MoveTo, fruit);
+            }
             var destination = new Vector2(50, 100);
             return new Action(ActionType.MoveTo, new Point(destination));
         }
 
         protected override void UpdateStateSelf()
         {
-            // TODO Change this
-            if ((DateTime.Now - CreatedAt).TotalSeconds > 2)
-            {
-                States.Remove(State.Alive);
-                States.Add(State.Dead);
-            }
+            // TODO Add rabbit specific states updates
+            base.UpdateStateSelf();
         }
     }
 }

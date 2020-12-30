@@ -17,7 +17,9 @@ namespace Rabbit_Island.Entities
         {
             Random random = new Random();
             MaxHealth = random.Next(90, 110);
+            Health = MaxHealth;
             MaxEnergy = random.Next(90, 110);
+            Energy = MaxEnergy;
             SightRange = random.Next(50);
             MovementSpeed = random.Next(5, 20);
             InteractionRange = random.Next(10);
@@ -68,7 +70,7 @@ namespace Rabbit_Island.Entities
             }
         }
 
-        protected override Action Think()
+        protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
             var destination = new Vector2(400, 400);
@@ -77,12 +79,8 @@ namespace Rabbit_Island.Entities
 
         protected override void UpdateStateSelf()
         {
-            // TODO Change this
-            if ((DateTime.Now - CreatedAt).TotalSeconds > 2)
-            {
-                States.Remove(State.Alive);
-                States.Add(State.Dead);
-            }
+            // TODO Add wolf specific states updates
+            base.UpdateStateSelf();
         }
     }
 }

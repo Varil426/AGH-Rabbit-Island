@@ -16,10 +16,13 @@ namespace Rabbit_Island.Entities
             Random random = new Random();
             Array values = Enum.GetValues(typeof(GenderType));
             Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
-            _timeOfLastMove = DateTime.Now;
+
+            _energyDrain = 10;
+
+            _timeOfLastAction = DateTime.Now;
         }
 
-        private DateTime _timeOfLastMove;
+        protected DateTime _timeOfLastAction;
 
         protected void Move(Entity destination)
         {
@@ -29,14 +32,12 @@ namespace Rabbit_Island.Entities
         protected void Move(Vector2 destination)
         {
             var now = DateTime.Now;
-            var timeDifference = now - _timeOfLastMove;
+            var timeDifference = now - _timeOfLastAction;
 
             var direction = Vector2.Normalize(destination - Position);
 
             var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
             Position = Position + direction * (float)distance;
-
-            _timeOfLastMove = now;
         }
 
         public enum State
@@ -57,6 +58,11 @@ namespace Rabbit_Island.Entities
             Male,
             Female
         }
+
+        /// <summary>
+        /// Energy drain per real time minute
+        /// </summary>
+        protected readonly float _energyDrain;
 
         public float MaxHealth { get; protected set; }
         public float Health { get; set; }
@@ -79,13 +85,26 @@ namespace Rabbit_Island.Entities
 
         public DateTime DeathAt { get; protected set; }
 
-        protected abstract void UpdateStateSelf();
+        protected virtual void UpdateStateSelf()
+        {
+            // TODO Change this
+            var timeRate = World.Instance.WorldConfig.TimeRate;
+            var timeDiff = (DateTime.Now - _timeOfLastAction).TotalMinutes;
 
-        protected abstract Action Think();
+            Energy -= (float)(_energyDrain * timeDiff * timeRate);
+
+            if (Energy <= 0)
+            {
+                States.Remove(State.Alive);
+                States.Add(State.Dead);
+            }
+        }
+
+        protected abstract Action Think(List<Entity> closeByEntities);
 
         protected abstract void PerformAction(Action action);
 
-        private List<Entity> GetClosebyEntites()
+        private List<Entity> GetCloseByEntites()
         {
             return World.Instance.GetCloseByEntities(this);
         }
@@ -114,11 +133,12 @@ namespace Rabbit_Island.Entities
         {
             while (States.Contains(State.Alive))
             {
-                var closebyEntites = GetClosebyEntites();
+                var closeByEntites = GetCloseByEntites();
                 UpdateStateSelf();
-                var action = Think();
+                var action = Think(closeByEntites);
                 PerformAction(action);
-                Thread.Sleep(50);
+                _timeOfLastAction = DateTime.Now;
+                Thread.Sleep(20);
             }
         }
     }
