@@ -11,6 +11,7 @@ namespace Rabbit_Island.Entities
         protected Creature(float x, float y) : base(x, y)
         {
             States = new HashSet<State>();
+            States.Add(State.Alive);
 
             Random random = new Random();
             Array values = Enum.GetValues(typeof(GenderType));
@@ -78,6 +79,47 @@ namespace Rabbit_Island.Entities
 
         public DateTime DeathAt { get; protected set; }
 
-        public abstract void Act();
+        protected abstract void UpdateStateSelf();
+
+        protected abstract Action Think();
+
+        protected abstract void PerformAction(Action action);
+
+        private List<Entity> GetClosebyEntites()
+        {
+            return World.Instance.GetCloseByEntities(this);
+        }
+
+        protected enum ActionType
+        {
+            MoveTo,
+            Eat,
+            // TODO Add more actions
+        }
+
+        protected class Action
+        {
+            public Action(ActionType type, Entity target)
+            {
+                Type = type;
+                Target = target;
+            }
+
+            public ActionType Type { get; }
+
+            public Entity Target { get; }
+        }
+
+        public void Act()
+        {
+            while (States.Contains(State.Alive))
+            {
+                var closebyEntites = GetClosebyEntites();
+                UpdateStateSelf();
+                var action = Think();
+                PerformAction(action);
+                Thread.Sleep(50);
+            }
+        }
     }
 }

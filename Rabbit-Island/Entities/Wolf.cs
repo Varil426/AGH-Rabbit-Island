@@ -23,21 +23,6 @@ namespace Rabbit_Island.Entities
             InteractionRange = random.Next(10);
         }
 
-        public override void Act()
-        {
-            // TODO Improve this
-            while (true)
-            {
-                var destination = new Vector2(100, 100);
-                var distance = Vector2.Distance(Position, destination);
-                Move(destination);
-                // TODO Move this sleep or make dependent on something
-                Thread.Sleep(50);
-                if (distance < 5)
-                    break;
-            }
-        }
-
         public override void DrawSelf(Canvas canvas)
         {
             var wolfCanvas = new Canvas();
@@ -64,6 +49,40 @@ namespace Rabbit_Island.Entities
             canvas.Children.Add(wolfCanvas);
             Canvas.SetLeft(wolfCanvas, Position.X);
             Canvas.SetTop(wolfCanvas, Position.Y);
+        }
+
+        protected override void PerformAction(Action action)
+        {
+            switch (action.Type)
+            {
+                case ActionType.MoveTo:
+                    Move(action.Target);
+                    break;
+
+                case ActionType.Eat:
+                    // TODO
+                    throw new NotImplementedException();
+
+                default:
+                    throw new Exception("Illegal action");
+            }
+        }
+
+        protected override Action Think()
+        {
+            // TODO Improve this
+            var destination = new Vector2(400, 400);
+            return new Action(ActionType.MoveTo, new Point(destination));
+        }
+
+        protected override void UpdateStateSelf()
+        {
+            // TODO Change this
+            if ((DateTime.Now - CreatedAt).TotalSeconds > 2)
+            {
+                States.Remove(State.Alive);
+                States.Add(State.Dead);
+            }
         }
     }
 }

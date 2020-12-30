@@ -9,7 +9,11 @@ namespace Rabbit_Island.Entities
         protected Entity(float x, float y)
         {
             _position = new Vector2(x, y);
-            CreateAt = DateTime.Now;
+            CreatedAt = DateTime.Now;
+        }
+
+        protected Entity(Vector2 position) : this(position.X, position.Y)
+        {
         }
 
         // TODO Maybe change Vector2 to something (or implement something) that uses double for greater precision
@@ -21,7 +25,7 @@ namespace Rabbit_Island.Entities
             protected set => _position = value;
         }
 
-        public DateTime CreateAt { get; }
+        public DateTime CreatedAt { get; }
 
         public bool IsHidden { get; set; }
 
