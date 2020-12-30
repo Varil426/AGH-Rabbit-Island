@@ -38,12 +38,18 @@ namespace Rabbit_Island
 
         public void AddEntity(Entity entity)
         {
-            _entities.Add(entity);
+            lock (_entities)
+            {
+                _entities.Add(entity);
+            }
         }
 
         public void RemoveEntity(Entity entity)
         {
-            _entities.Remove(entity);
+            lock (_entities)
+            {
+                _entities.Remove(entity);
+            }
         }
 
         public void StartSimulation()
