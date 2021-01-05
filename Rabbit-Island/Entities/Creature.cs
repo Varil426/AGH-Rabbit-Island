@@ -113,7 +113,8 @@ namespace Rabbit_Island.Entities
         {
             MoveTo,
             Eat,
-            // TODO Add more actions
+            Mate,
+            Nothing
         }
 
         protected class Action
