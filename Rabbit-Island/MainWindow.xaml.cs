@@ -116,6 +116,10 @@ namespace Rabbit_Island
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
 
+            // Scale values in simulation to TimeRate
+            Rabbit.RabbitsValues.RefreshTimeScalar();
+            // TODO The same for wolves
+
             CreateEntities();
 
             var simulationWindow = new SimulationWindow();
