@@ -63,26 +63,41 @@ namespace Rabbit_Island
                     IsBackground = true
                 };
                 threads.Add(th);
+                creature.CreatureThread = th;
             }
             threads.ForEach(x => x.Start());
         }
 
+        public List<Entity> GetAllEntities()
+        {
+            lock (_entities)
+            {
+                return new List<Entity>(_entities);
+            }
+        }
+
         public List<Entity> GetCloseByEntities(Entity entity)
         {
-            return _entities.Where(x =>
+            lock (_entities)
             {
-                var distance = Vector2.Distance(entity.Position, x.Position);
-                return distance <= 10;
-            }).ToList();
+                return _entities.Where(x =>
+                {
+                    var distance = Vector2.Distance(entity.Position, x.Position);
+                    return distance <= 10 && x != entity;
+                }).ToList();
+            }
         }
 
         public List<Entity> GetCloseByEntities(Creature creature)
         {
-            return _entities.Where(x =>
+            lock (_entities)
             {
-                var distance = Vector2.Distance(creature.Position, x.Position);
-                return distance <= creature.SightRange;
-            }).ToList();
+                return _entities.Where(x =>
+                {
+                    var distance = Vector2.Distance(creature.Position, x.Position);
+                    return distance <= creature.SightRange && x != creature;
+                }).ToList();
+            }
         }
 
         public Map WorldMap
@@ -90,7 +105,5 @@ namespace Rabbit_Island
             get => _worldMap;
             set => _worldMap = value;
         }
-
-        public List<Entity> Entities => _entities;
     }
 }

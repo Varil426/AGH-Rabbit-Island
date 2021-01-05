@@ -17,12 +17,24 @@ namespace Rabbit_Island.Entities
             Array values = Enum.GetValues(typeof(GenderType));
             Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
 
-            _energyDrain = 10;
+            _energyDrain = 2;
 
             _timeOfLastAction = DateTime.Now;
         }
 
         protected DateTime _timeOfLastAction;
+
+        private Thread? _creatureThread;
+
+        public Thread? CreatureThread
+        {
+            get => _creatureThread;
+            set
+            {
+                if (_creatureThread == null)
+                    _creatureThread = value;
+            }
+        }
 
         protected void Move(Entity destination)
         {
@@ -37,7 +49,14 @@ namespace Rabbit_Island.Entities
             var direction = Vector2.Normalize(destination - Position);
 
             var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
-            Position = Position + direction * (float)distance;
+            var newPosition = Position + direction * (float)distance;
+            if (newPosition.X <= World.Instance.WorldMap.Size.Item1
+                && newPosition.X >= 0
+                && newPosition.Y <= World.Instance.WorldMap.Size.Item2
+                && newPosition.Y >= 0)
+            {
+                Position = newPosition;
+            }
         }
 
         public enum State
@@ -50,7 +69,8 @@ namespace Rabbit_Island.Entities
             Alive,
             Dead,
             SearchingForFood,
-            Mating
+            Mating,
+            WaitingToMate
         }
 
         public enum GenderType
@@ -58,6 +78,10 @@ namespace Rabbit_Island.Entities
             Male,
             Female
         }
+
+        public bool WaitingToMate => States.Contains(State.WaitingToMate);
+
+        public bool IsPregnant => States.Contains(State.Pregnant);
 
         /// <summary>
         /// Energy drain per real time minute
@@ -84,6 +108,10 @@ namespace Rabbit_Island.Entities
         public HashSet<State> States { get; }
 
         public DateTime DeathAt { get; protected set; }
+
+        public DateTime? PregnantAt { get; protected set; }
+
+        public Creature? PregnantWith { get; protected set; }
 
         protected virtual void UpdateStateSelf()
         {

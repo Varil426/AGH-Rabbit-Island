@@ -11,6 +11,35 @@ namespace Rabbit_Island.Entities
 {
     internal class Rabbit : Creature
     {
+        public static class RabbitsValues
+        {
+            /// <summary>
+            /// Scales values to match the Time Rate of the World.
+            /// </summary>
+            public static void RefreshTimeScalar()
+            {
+                int timeScalar = 1000 / (int)World.Instance.WorldConfig.TimeRate;
+                EatingTime = 120 * timeScalar;
+                MatingTime = 300 * timeScalar;
+                WaitToMateTime = 50 * timeScalar;
+            }
+
+            /// <summary>
+            /// Time needed to eat a fruit.
+            /// </summary>
+            public static int EatingTime { get; private set; }
+
+            /// <summary>
+            /// Time neede to mate.
+            /// </summary>
+            public static int MatingTime { get; private set; }
+
+            /// <summary>
+            /// Wait for other rabbit to mate time.
+            /// </summary>
+            public static int WaitToMateTime { get; private set; }
+        }
+
         public Rabbit(float x, float y) : base(x, y)
         {
             Random random = new Random();
@@ -63,8 +92,50 @@ namespace Rabbit_Island.Entities
                     break;
 
                 case ActionType.Eat:
-                    // TODO
-                    throw new NotImplementedException();
+                    Thread.Sleep(RabbitsValues.EatingTime);
+                    var energy = Energy + 50;
+                    if (energy > MaxEnergy)
+                        energy = MaxEnergy;
+                    Energy = energy;
+                    World.Instance.RemoveEntity(action.Target);
+                    break;
+
+                case ActionType.Mate:
+                    // TODO Improve intertherad communication
+                    if (action.Target is Rabbit otherRabbit)
+                    {
+                        if (otherRabbit.WaitingToMate)
+                        {
+                            otherRabbit.CreatureThread!.Interrupt();
+                            Thread.Sleep(RabbitsValues.MatingTime);
+                            if (Gender == GenderType.Female)
+                            {
+                                PregnantAt = DateTime.Now;
+                                PregnantWith = otherRabbit;
+                                States.Add(State.Pregnant);
+                            }
+                        }
+                        else
+                        {
+                            States.Add(State.WaitingToMate);
+                            try
+                            {
+                                Thread.Sleep(RabbitsValues.WaitToMateTime);
+                            }
+                            catch (ThreadInterruptedException)
+                            {
+                                Thread.Sleep(RabbitsValues.MatingTime);
+                                if (Gender == GenderType.Female)
+                                {
+                                    PregnantAt = DateTime.Now;
+                                    PregnantWith = otherRabbit;
+                                    States.Add(State.Pregnant);
+                                }
+                            }
+                            States.Remove(State.WaitingToMate);
+                        }
+                    }
+                    break;
 
                 default:
                     throw new Exception("Illegal action");
@@ -74,9 +145,26 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
-            if (closeByEntities.Find(entity => entity is Fruit) is Fruit fruit)
+            if (Energy < MaxEnergy / 2)
             {
-                return new Action(ActionType.MoveTo, fruit);
+                if (closeByEntities.Find(entity => entity is Fruit) is Fruit fruit)
+                {
+                    if (Vector2.Distance(Position, fruit.Position) <= InteractionRange)
+                    {
+                        return new Action(ActionType.Eat, fruit);
+                    }
+                    return new Action(ActionType.MoveTo, fruit);
+                }
+            }
+            else if (closeByEntities.Find(entity => entity is Rabbit rabbit
+                && rabbit.Gender != Gender
+                && !rabbit.IsPregnant) is Rabbit otherRabbit)
+            {
+                if (Vector2.Distance(Position, otherRabbit.Position) <= InteractionRange)
+                {
+                    return new Action(ActionType.Mate, otherRabbit);
+                }
+                return new Action(ActionType.MoveTo, otherRabbit);
             }
             var destination = new Vector2(50, 100);
             return new Action(ActionType.MoveTo, new Point(destination));
@@ -85,6 +173,7 @@ namespace Rabbit_Island.Entities
         protected override void UpdateStateSelf()
         {
             // TODO Add rabbit specific states updates
+            // TODO Check for rabbit pregnancy, and if finished create new rabbits
             base.UpdateStateSelf();
         }
     }

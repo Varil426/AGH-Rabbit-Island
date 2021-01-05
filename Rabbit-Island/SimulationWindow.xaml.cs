@@ -46,7 +46,7 @@ namespace Rabbit_Island
                     {
                         canvas.Children.Clear();
 
-                        foreach (var entity in world.Entities)
+                        foreach (var entity in world.GetAllEntities())
                         {
                             entity.DrawSelf(canvas);
                         }
