@@ -40,8 +40,8 @@
         <GroupBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <GroupBox.Header>General Config</GroupBox.Header>
             <StackPanel>
-                <Label>Time Rate</Label>
-                <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" Text="1000" />
+                <Label Name="TimeRateLabel">Time Rate</Label>
+                <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" TextChanged="TimeRateChange" Text="1000" />
                 <Label>Death From Old Age</Label>
                 <CheckBox Name="DeathFromOldAgeInput" IsChecked="True" />
                 <Label>Max Creatures</Label>

@@ -2,6 +2,7 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Rabbit_Island
@@ -22,6 +23,21 @@ namespace Rabbit_Island
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void TimeRateChange(object sender, TextChangedEventArgs args)
+        {
+            Regex regex = new Regex("^0+$");
+            if (TimeRateInput.Text.Length == 0 || regex.IsMatch(TimeRateInput.Text))
+            {
+                TimeRateLabel.Content = "Invalid Value!";
+            }
+            else
+            {
+                var timeRate = Double.Parse(TimeRateInput.Text);
+                var newText = $"Time Rate ({3600 / timeRate} seconds = 1 real-time hour)";
+                TimeRateLabel.Content = newText;
+            }
         }
 
         private Config CreateConfigFromUserInput()
