@@ -62,9 +62,25 @@ namespace Rabbit_Island.Entities
                     break;
 
                 case ActionType.Eat:
-                    // TODO
+                    /* 
+                    - zatrzymuje się na określony czas - sleep np. 30 sekund
+                    - usuwany jest obiekt Królika (powinien mieć takie same współrzędne) 
+                    - Energia jest dodawana
+                    - ? Health jest dodawany ?
+                    break;
+                     */
                     throw new NotImplementedException();
-
+                case ActionType.Mate:
+                    /* 
+                    //TODO
+                    break;
+                    */
+                    throw new NotImplementedException();
+                case ActionType.Nothing:
+                    /* 
+                    - tu chyba nic nie będzie
+                    */
+                    break;
                 default:
                     throw new Exception("Illegal action");
             }
@@ -73,6 +89,9 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
+
+
+
             var destination = new Vector2(400, 400);
             return new Action(ActionType.MoveTo, new Point(destination));
         }
@@ -81,6 +100,10 @@ namespace Rabbit_Island.Entities
         {
             // TODO Add wolf specific states updates
             base.UpdateStateSelf();
+            /*
+             - tu jest tracona energia (napisane w klasie bazowej)
+             - TODO co jeszcze
+             */
         }
     }
 }
