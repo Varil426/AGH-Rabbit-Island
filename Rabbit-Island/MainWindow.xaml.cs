@@ -57,6 +57,19 @@ namespace Rabbit_Island
             var mapSize = int.Parse(MapSizeInput.Text);
             var pregnancyDuration = int.Parse(PregnancyDurationInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
+
+            World.GenerateOffspringMethod generateOffspringMethod;
+
+            switch (OffspringGenerationMethodInput.SelectedIndex)
+            {
+                case 0:
+                    generateOffspringMethod = OffspringGeneration.BasicOffspringGeneration;
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid OffspringGenerationMethod selected");
+            }
+
             var config = new Config()
             {
                 TimeRate = timeRate,
@@ -65,7 +78,8 @@ namespace Rabbit_Island
                 FruitsPerDay = fruitsPerDay,
                 PregnancyDuration = pregnancyDuration,
                 DrawRanges = drawRanges,
-                MapSize = (mapSize, mapSize)
+                MapSize = (mapSize, mapSize),
+                SelectedOffspringGenerationMethod = generateOffspringMethod
             };
 
             config.RabbitConfig.InitialPopulation = rabbitsInitialPopulation;
@@ -115,6 +129,7 @@ namespace Rabbit_Island
 
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
+            World.GenerateOffspring = world.WorldConfig.SelectedOffspringGenerationMethod;
 
             // Scale values in simulation to TimeRate
             Rabbit.RaceValues.RefreshTimeScalar();

@@ -50,6 +50,10 @@
                 <TextBox Name="FruitsPerDayInput" PreviewTextInput="NumericTextBox" Text="60" />
                 <Label>Map Size</Label>
                 <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="500" />
+                <Label>Offspring Generation Method</Label>
+                <ComboBox Name="OffspringGenerationMethodInput">
+                    <ComboBoxItem IsSelected="True">Basic Offspring Generation Method</ComboBoxItem>
+                </ComboBox>
                 <Label>Pregnancy Duration (Days)</Label>
                 <TextBox Name="PregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
                 <Label>Food Expires</Label>

@@ -60,6 +60,20 @@ namespace Rabbit_Island.Entities
             Fear = random.Next(10);
         }
 
+        public Rabbit(
+            Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange,
+            int fear) : base(position.X, position.Y)
+        {
+            MaxHealth = maxHealth;
+            Health = MaxHealth;
+            MaxEnergy = maxEnergy;
+            Energy = MaxEnergy;
+            SightRange = sightRange;
+            MovementSpeed = movementSpeed;
+            InteractionRange = interactionRange;
+            Fear = fear;
+        }
+
         public int Fear { get; }
 
         public override void DrawSelf(Canvas canvas)
@@ -160,7 +174,8 @@ namespace Rabbit_Island.Entities
             }
             else if (closeByEntities.Find(entity => entity is Rabbit rabbit
                 && rabbit.Gender != Gender
-                && !rabbit.IsPregnant) is Rabbit otherRabbit)
+                && !rabbit.IsPregnant
+                && !IsPregnant) is Rabbit otherRabbit)
             {
                 if (Vector2.Distance(Position, otherRabbit.Position) <= InteractionRange)
                 {
@@ -191,7 +206,6 @@ namespace Rabbit_Island.Entities
         protected override void UpdateStateSelf()
         {
             // TODO Add rabbit specific states updates
-            // TODO Check for rabbit pregnancy, and if finished create new rabbits
             base.UpdateStateSelf();
             // Rabbit specific status updates
             UpdatePregnancyStatus();

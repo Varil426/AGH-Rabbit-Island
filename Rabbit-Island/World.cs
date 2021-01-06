@@ -19,6 +19,8 @@ namespace Rabbit_Island
 
         static World()
         {
+            // Assign default offspring generation method
+            GenerateOffspring = OffspringGeneration.BasicOffspringGeneration;
         }
 
         private World()

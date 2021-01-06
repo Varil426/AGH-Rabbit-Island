@@ -55,6 +55,8 @@ namespace Rabbit_Island
 
         public bool DrawRanges { get; set; }
 
+        public World.GenerateOffspringMethod? SelectedOffspringGenerationMethod { get; set; }
+
         public (int, int) MapSize
         {
             get => _mapSize;
