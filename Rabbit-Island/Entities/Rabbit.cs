@@ -101,12 +101,11 @@ namespace Rabbit_Island.Entities
                     break;
 
                 case ActionType.Mate:
-                    // TODO Improve intertherad communication
                     if (action.Target is Rabbit otherRabbit)
                     {
                         if (otherRabbit.WaitingToMate)
                         {
-                            otherRabbit.CreatureThread!.Interrupt();
+                            otherRabbit.InteractionEvent.Set();
                             Thread.Sleep(RabbitsValues.MatingTime);
                             if (Gender == GenderType.Female)
                             {
@@ -118,21 +117,17 @@ namespace Rabbit_Island.Entities
                         else
                         {
                             States.Add(State.WaitingToMate);
-                            try
-                            {
-                                Thread.Sleep(RabbitsValues.WaitToMateTime);
-                            }
-                            catch (ThreadInterruptedException)
-                            {
-                                Thread.Sleep(RabbitsValues.MatingTime);
-                                if (Gender == GenderType.Female)
-                                {
-                                    PregnantAt = DateTime.Now;
-                                    PregnantWith = otherRabbit;
-                                    States.Add(State.Pregnant);
-                                }
-                            }
+                            InteractionEvent.WaitOne();
                             States.Remove(State.WaitingToMate);
+
+                            Thread.Sleep(RabbitsValues.MatingTime);
+
+                            if (Gender == GenderType.Female)
+                            {
+                                PregnantAt = DateTime.Now;
+                                PregnantWith = otherRabbit;
+                                States.Add(State.Pregnant);
+                            }
                         }
                     }
                     break;

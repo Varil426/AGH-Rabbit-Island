@@ -17,6 +17,8 @@ namespace Rabbit_Island.Entities
             Array values = Enum.GetValues(typeof(GenderType));
             Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
 
+            InteractionEvent = new AutoResetEvent(false);
+
             _energyDrain = 2;
 
             _timeOfLastAction = DateTime.Now;
@@ -35,6 +37,8 @@ namespace Rabbit_Island.Entities
                     _creatureThread = value;
             }
         }
+
+        protected AutoResetEvent InteractionEvent { get; }
 
         protected void Move(Entity destination)
         {
