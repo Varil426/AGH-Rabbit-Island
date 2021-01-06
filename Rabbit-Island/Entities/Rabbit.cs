@@ -11,33 +11,40 @@ namespace Rabbit_Island.Entities
 {
     internal class Rabbit : Creature
     {
-        public static class RabbitsValues
+        public static class RaceValues
         {
             /// <summary>
             /// Scales values to match the Time Rate of the World.
             /// </summary>
             public static void RefreshTimeScalar()
             {
+                // Time in seconds scaled to simulation time rate
                 int timeScalar = 1000 / (int)World.Instance.WorldConfig.TimeRate;
                 EatingTime = 120 * timeScalar;
                 MatingTime = 300 * timeScalar;
                 WaitToMateTime = 50 * timeScalar;
+                PregnancyTime = 3600 * 24 * 3 * timeScalar;
             }
 
             /// <summary>
-            /// Time needed to eat a fruit.
+            /// Time needed to eat a fruit. (Scaled to simulation time rate)
             /// </summary>
             public static int EatingTime { get; private set; }
 
             /// <summary>
-            /// Time neede to mate.
+            /// Time neede to mate. (Scaled to simulation time rate)
             /// </summary>
             public static int MatingTime { get; private set; }
 
             /// <summary>
-            /// Wait for other rabbit to mate time.
+            /// Wait for other rabbit to mate time. (Scaled to simulation time rate)
             /// </summary>
             public static int WaitToMateTime { get; private set; }
+
+            /// <summary>
+            /// Time that pregnancy takes. (Scaled to simulation time rate)
+            /// </summary>
+            public static int PregnancyTime { get; private set; }
         }
 
         public Rabbit(float x, float y) : base(x, y)
@@ -92,7 +99,7 @@ namespace Rabbit_Island.Entities
                     break;
 
                 case ActionType.Eat:
-                    Thread.Sleep(RabbitsValues.EatingTime);
+                    Thread.Sleep(RaceValues.EatingTime);
                     var energy = Energy + 50;
                     if (energy > MaxEnergy)
                         energy = MaxEnergy;
@@ -106,7 +113,7 @@ namespace Rabbit_Island.Entities
                         if (otherRabbit.WaitingToMate)
                         {
                             otherRabbit.InteractionEvent.Set();
-                            Thread.Sleep(RabbitsValues.MatingTime);
+                            Thread.Sleep(RaceValues.MatingTime);
                             if (Gender == GenderType.Female)
                             {
                                 PregnantAt = DateTime.Now;
@@ -120,7 +127,7 @@ namespace Rabbit_Island.Entities
                             InteractionEvent.WaitOne();
                             States.Remove(State.WaitingToMate);
 
-                            Thread.Sleep(RabbitsValues.MatingTime);
+                            Thread.Sleep(RaceValues.MatingTime);
 
                             if (Gender == GenderType.Female)
                             {
@@ -165,11 +172,29 @@ namespace Rabbit_Island.Entities
             return new Action(ActionType.MoveTo, new Point(destination));
         }
 
+        protected void UpdatePregnancyStatus()
+        {
+            if (Gender == GenderType.Female
+                && States.Contains(State.Pregnant)
+                && PregnantAt.AddMilliseconds(RaceValues.PregnancyTime) <= DateTime.Now
+                && PregnantWith != null)
+            {
+                var offspring = World.GenerateOffspring(this, PregnantWith);
+                foreach (Creature creature in offspring)
+                {
+                    World.Instance.AddCreature(creature);
+                }
+                States.Remove(State.Pregnant);
+            }
+        }
+
         protected override void UpdateStateSelf()
         {
             // TODO Add rabbit specific states updates
             // TODO Check for rabbit pregnancy, and if finished create new rabbits
             base.UpdateStateSelf();
+            // Rabbit specific status updates
+            UpdatePregnancyStatus();
         }
     }
 }

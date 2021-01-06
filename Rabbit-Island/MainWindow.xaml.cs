@@ -117,7 +117,7 @@ namespace Rabbit_Island
             world.WorldMap = new Map(world.WorldConfig.MapSize);
 
             // Scale values in simulation to TimeRate
-            Rabbit.RabbitsValues.RefreshTimeScalar();
+            Rabbit.RaceValues.RefreshTimeScalar();
             // TODO The same for wolves
 
             CreateEntities();

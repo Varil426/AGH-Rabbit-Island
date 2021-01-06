@@ -36,11 +36,32 @@ namespace Rabbit_Island
             }
         }
 
+        /// <summary>
+        /// Adds entity to the world.
+        /// </summary>
+        /// <param name="entity">Entity to be added to the world.</param>
         public void AddEntity(Entity entity)
         {
             lock (_entities)
             {
                 _entities.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Adds and starts thread for creature.
+        /// </summary>
+        /// <param name="creature">Creature to be added to the world.</param>
+        public void AddCreature(Creature creature)
+        {
+            lock (_entities)
+            {
+                var th = new Thread(creature.Act)
+                {
+                    IsBackground = true
+                };
+                creature.CreatureThread = th;
+                th.Start();
             }
         }
 
@@ -105,5 +126,9 @@ namespace Rabbit_Island
             get => _worldMap;
             set => _worldMap = value;
         }
+
+        public delegate List<Creature> GenerateOffspringMethod(Creature mother, Creature father);
+
+        public static GenerateOffspringMethod GenerateOffspring;
     }
 }

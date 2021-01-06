@@ -113,7 +113,7 @@ namespace Rabbit_Island.Entities
 
         public DateTime DeathAt { get; protected set; }
 
-        public DateTime? PregnantAt { get; protected set; }
+        public DateTime PregnantAt { get; protected set; }
 
         public Creature? PregnantWith { get; protected set; }
 
@@ -127,14 +127,27 @@ namespace Rabbit_Island.Entities
 
             if (Energy <= 0)
             {
-                States.Remove(State.Alive);
-                States.Add(State.Dead);
+                Die();
             }
         }
 
         protected abstract Action Think(List<Entity> closeByEntities);
 
         protected abstract void PerformAction(Action action);
+
+        protected void Die()
+        {
+            if (States.Contains(State.Alive))
+            {
+                States.Remove(State.Alive);
+                States.Add(State.Dead);
+                DeathAt = DateTime.Now;
+            }
+            else
+            {
+                throw new Exception("Die() was called on not alive creature");
+            }
+        }
 
         private List<Entity> GetCloseByEntites()
         {
