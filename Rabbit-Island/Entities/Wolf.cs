@@ -89,9 +89,37 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
+            // sprawdza czy w zasięgu wzroku jest królik:
+            if (closeByEntities.Find(entity => entity is Rabbit) is Rabbit rabbit)
+            { 
+                // sprawdza czy królik jest w zasięgu interakcji:
+                if (Vector2.Distance(this.Position, rabbit.Position) <= this.InteractionRange)
+                {
+                    // jeśli jest zmienia akcję na Eat:
+                    return new Action(ActionType.Eat, rabbit);
+                }
+                // jeśli nie jest wtedy wilk goni królika:
+                return new Action(ActionType.MoveTo, rabbit);
+            }
 
+            // sprawdza czy w zasięgu wzroku jest wilk:
+            if (closeByEntities.Find(entity => entity is Wolf) is Wolf anotherWolf)
+            {
+                // sprawdza czy anotherWolf jest innej płci
+                if (this.Gender != anotherWolf.Gender)
+                {
+                    // sprawdza czy anotherWolf jest w zasięgu interakcji:
+                    if (Vector2.Distance(this.Position, anotherWolf.Position) <= this.InteractionRange)
+                    {
+                        //TODO tu coś więcej warunków żeby zmienić stan na Mating
+                        // - sprawdzić czy anotherWolf nie jest w ciąży / już mating
+                    }
+                    // jeśli nie jest wtedy wilk goni anotherWolf:
+                    return new Action(ActionType.MoveTo, anotherWolf);
+                } 
+            }
 
-
+            // przypadek ostatni (gdy nic się nie dopasowało) - idzie w dowolnym kierunku, wartości raczej powinny być losowe
             var destination = new Vector2(400, 400);
             return new Action(ActionType.MoveTo, new Point(destination));
         }
@@ -102,7 +130,7 @@ namespace Rabbit_Island.Entities
             base.UpdateStateSelf();
             /*
              - tu jest tracona energia (napisane w klasie bazowej)
-             - TODO co jeszcze
+             - TODO co jeszcze?
              */
         }
     }
