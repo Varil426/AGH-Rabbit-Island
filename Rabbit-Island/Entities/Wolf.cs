@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -28,7 +24,7 @@ namespace Rabbit_Island.Entities
         public override void DrawSelf(Canvas canvas)
         {
             var wolfCanvas = new Canvas();
-            var color = Brushes.Red;
+            var color = IsAlive ? Brushes.Red : Brushes.Purple;
             var rectangle = new Rectangle()
             {
                 Width = 1,
@@ -36,7 +32,7 @@ namespace Rabbit_Island.Entities
                 Fill = color
             };
             wolfCanvas.Children.Add(rectangle);
-            if (World.Instance.WorldConfig.DrawRanges)
+            if (World.Instance.WorldConfig.DrawRanges && IsAlive)
             {
                 var sightRange = new Ellipse()
                 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 using System.Threading;
 
 namespace Rabbit_Island.Entities
@@ -116,6 +115,10 @@ namespace Rabbit_Island.Entities
         public DateTime PregnantAt { get; protected set; }
 
         public Creature? PregnantWith { get; protected set; }
+
+        public bool IsAlive => States.Contains(State.Alive) ?
+            States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true
+            : false;
 
         protected virtual void UpdateStateSelf()
         {

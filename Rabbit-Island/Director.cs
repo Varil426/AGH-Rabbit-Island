@@ -1,13 +1,12 @@
 ﻿using Rabbit_Island.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Rabbit_Island
 {
+    /// <summary>
+    /// Singleton that is meant to be managing not-alive entities.
+    /// </summary>
     internal class Director
     {
         private readonly static Director _instance = new Director();
@@ -63,7 +62,7 @@ namespace Rabbit_Island
                         world.GetAllEntities().FindAll(entity => entity is Creature).ForEach(entity =>
                         {
                             var creature = entity as Creature;
-                            if (creature != null && creature.States.Contains(Creature.State.Dead) && creature.DeathAt.AddMilliseconds(expirencyTime) <= DateTime.Now)
+                            if (creature != null && !creature.IsAlive && creature.DeathAt.AddMilliseconds(expirencyTime) <= DateTime.Now)
                             {
                                 world.RemoveEntity(creature);
                             }

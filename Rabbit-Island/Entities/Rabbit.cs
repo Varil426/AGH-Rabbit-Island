@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -79,7 +78,7 @@ namespace Rabbit_Island.Entities
         public override void DrawSelf(Canvas canvas)
         {
             var rabbitCanvas = new Canvas();
-            var color = Brushes.Blue;
+            var color = IsAlive ? Brushes.Blue : Brushes.Purple;
             var rectangle = new Rectangle()
             {
                 Width = 1,
@@ -87,7 +86,7 @@ namespace Rabbit_Island.Entities
                 Fill = color
             };
             rabbitCanvas.Children.Add(rectangle);
-            if (World.Instance.WorldConfig.DrawRanges)
+            if (World.Instance.WorldConfig.DrawRanges && IsAlive)
             {
                 var sightRange = new Ellipse()
                 {
@@ -138,7 +137,7 @@ namespace Rabbit_Island.Entities
                         else
                         {
                             States.Add(State.WaitingToMate);
-                            InteractionEvent.WaitOne();
+                            InteractionEvent.WaitOne(RaceValues.WaitToMateTime);
                             States.Remove(State.WaitingToMate);
 
                             Thread.Sleep(RaceValues.MatingTime);
