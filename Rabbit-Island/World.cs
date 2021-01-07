@@ -77,6 +77,13 @@ namespace Rabbit_Island
 
         public void StartSimulation()
         {
+            var directorThread = new Thread(Director.Instance.Run)
+            {
+                Name = "Director Thread",
+                IsBackground = true
+            };
+            directorThread.Start();
+
             // TODO Move it to fields
             var threads = new List<Thread>();
             foreach (ICreature creature in _entities.Where(x => x is ICreature))

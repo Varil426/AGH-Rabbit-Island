@@ -101,14 +101,8 @@ namespace Rabbit_Island
             return (x, y);
         }
 
-        private void CreateEntities()
+        private void CreateInitialCreatures()
         {
-            // Create Fruits
-            for (int i = 0; i < world.WorldConfig.FruitsPerDay; i++)
-            {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Fruit(position.Item1, position.Item2));
-            }
             // Create Rabbits
             for (int i = 0; i < world.WorldConfig.RabbitConfig.InitialPopulation; i++)
             {
@@ -129,13 +123,15 @@ namespace Rabbit_Island
 
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
-            World.GenerateOffspring = world.WorldConfig.SelectedOffspringGenerationMethod;
-
+            if (world.WorldConfig.SelectedOffspringGenerationMethod is World.GenerateOffspringMethod)
+            {
+                World.GenerateOffspring = world.WorldConfig.SelectedOffspringGenerationMethod;
+            }
             // Scale values in simulation to TimeRate
-            Rabbit.RaceValues.RefreshTimeScalar();
+            Rabbit.RaceValues.RefreshValues();
             // TODO The same for wolves
 
-            CreateEntities();
+            CreateInitialCreatures();
 
             var simulationWindow = new SimulationWindow();
             var graphsWindow = new GraphsWindow();

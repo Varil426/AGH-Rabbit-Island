@@ -16,7 +16,7 @@ namespace Rabbit_Island.Entities
             /// <summary>
             /// Scales values to match the Time Rate of the World.
             /// </summary>
-            public static void RefreshTimeScalar()
+            public static void RefreshValues()
             {
                 // Time in seconds scaled to simulation time rate
                 int timeScalar = 1000 / (int)World.Instance.WorldConfig.TimeRate;
