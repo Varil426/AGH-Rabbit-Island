@@ -21,11 +21,17 @@ namespace Rabbit_Island.Entities
             _energyDrain = 2;
 
             _timeOfLastAction = DateTime.Now;
+            _movingSince = DateTime.Now;
+            _moveDirection = new RelativePosition(this, RelativePosition.Direction.North);
         }
 
         protected DateTime _timeOfLastAction;
 
-        private Thread? _creatureThread;
+        protected Thread? _creatureThread;
+
+        protected DateTime _movingSince;
+
+        protected RelativePosition _moveDirection;
 
         public Thread? CreatureThread
         {
@@ -140,7 +146,7 @@ namespace Rabbit_Island.Entities
 
         protected void Die()
         {
-            if (States.Contains(State.Alive))
+            if (IsAlive)
             {
                 States.Remove(State.Alive);
                 States.Add(State.Dead);
@@ -180,7 +186,7 @@ namespace Rabbit_Island.Entities
 
         public void Act()
         {
-            while (States.Contains(State.Alive))
+            while (IsAlive)
             {
                 var closeByEntites = GetCloseByEntites();
                 UpdateStateSelf();

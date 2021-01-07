@@ -23,6 +23,7 @@ namespace Rabbit_Island.Entities
                 MatingTime = 300 * timeScalar;
                 WaitToMateTime = 50 * timeScalar;
                 PregnancyTime = 3600 * 24 * 3 * timeScalar;
+                MoveInOneDirectionTime = 300 * timeScalar;
             }
 
             /// <summary>
@@ -44,6 +45,11 @@ namespace Rabbit_Island.Entities
             /// Time that pregnancy takes. (Scaled to simulation time rate)
             /// </summary>
             public static int PregnancyTime { get; private set; }
+
+            /// <summary>
+            /// Represents how long rabbit should move in one direction while searching for food. (Scaled to simulation time rate)
+            /// </summary>
+            public static int MoveInOneDirectionTime { get; private set; }
         }
 
         public Rabbit(float x, float y) : base(x, y)
@@ -53,7 +59,7 @@ namespace Rabbit_Island.Entities
             Health = MaxHealth;
             MaxEnergy = random.Next(90, 110);
             Energy = MaxEnergy;
-            SightRange = random.Next(50);
+            SightRange = random.Next(25, 50);
             MovementSpeed = random.Next(5, 20);
             InteractionRange = random.Next(10);
             Fear = random.Next(10);
@@ -152,6 +158,9 @@ namespace Rabbit_Island.Entities
                     }
                     break;
 
+                case ActionType.Nothing:
+                    break;
+
                 default:
                     throw new Exception("Illegal action");
             }
@@ -162,28 +171,46 @@ namespace Rabbit_Island.Entities
             // TODO Improve this
             if (Energy < MaxEnergy / 2)
             {
+                if (States.Add(State.SearchingForFood))
+                {
+                    _movingSince = DateTime.Now;
+                }
                 if (closeByEntities.Find(entity => entity is Fruit) is Fruit fruit)
                 {
                     if (Vector2.Distance(Position, fruit.Position) <= InteractionRange)
                     {
+                        States.Remove(State.SearchingForFood);
                         return new Action(ActionType.Eat, fruit);
                     }
                     return new Action(ActionType.MoveTo, fruit);
                 }
+                else if (_movingSince.AddMilliseconds(RaceValues.MoveInOneDirectionTime) <= DateTime.Now)
+                {
+                    var possibleValues = Enum.GetValues(typeof(RelativePosition.Direction)).Length;
+                    var direction = (RelativePosition.Direction)StaticRandom.Generator.Next(possibleValues);
+                    _movingSince = DateTime.Now;
+                    _moveDirection = new RelativePosition(this, direction);
+                    return new Action(ActionType.MoveTo, _moveDirection);
+                }
+                else
+                {
+                    return new Action(ActionType.MoveTo, _moveDirection);
+                }
             }
             else if (closeByEntities.Find(entity => entity is Rabbit rabbit
+                && rabbit.IsAlive
                 && rabbit.Gender != Gender
                 && !rabbit.IsPregnant
                 && !IsPregnant) is Rabbit otherRabbit)
             {
+                // TODO Add ability to search for mating partner
                 if (Vector2.Distance(Position, otherRabbit.Position) <= InteractionRange)
                 {
                     return new Action(ActionType.Mate, otherRabbit);
                 }
                 return new Action(ActionType.MoveTo, otherRabbit);
             }
-            var destination = new Vector2(50, 100);
-            return new Action(ActionType.MoveTo, new Point(destination));
+            return new Action(ActionType.Nothing, this);
         }
 
         protected void UpdatePregnancyStatus()
