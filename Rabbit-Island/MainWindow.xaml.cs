@@ -14,6 +14,8 @@ namespace Rabbit_Island
     {
         private World world = World.Instance;
 
+        // TODO Add check for invalid values (or too big/small)
+
         public MainWindow()
         {
             InitializeComponent();
@@ -57,6 +59,19 @@ namespace Rabbit_Island
             var mapSize = int.Parse(MapSizeInput.Text);
             var pregnancyDuration = int.Parse(PregnancyDurationInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
+
+            World.GenerateOffspringMethod generateOffspringMethod;
+
+            switch (OffspringGenerationMethodInput.SelectedIndex)
+            {
+                case 0:
+                    generateOffspringMethod = OffspringGeneration.BasicOffspringGeneration;
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid OffspringGenerationMethod selected");
+            }
+
             var config = new Config()
             {
                 TimeRate = timeRate,
@@ -65,7 +80,8 @@ namespace Rabbit_Island
                 FruitsPerDay = fruitsPerDay,
                 PregnancyDuration = pregnancyDuration,
                 DrawRanges = drawRanges,
-                MapSize = (mapSize, mapSize)
+                MapSize = (mapSize, mapSize),
+                SelectedOffspringGenerationMethod = generateOffspringMethod
             };
 
             config.RabbitConfig.InitialPopulation = rabbitsInitialPopulation;
@@ -79,33 +95,17 @@ namespace Rabbit_Island
             return config;
         }
 
-        private (float, float) GenerateRandomPosition()
+        private void CreateInitialCreatures()
         {
-            Random random = new Random();
-            float x = random.Next(world.WorldMap.Size.Item1);
-            float y = random.Next(world.WorldMap.Size.Item2);
-            return (x, y);
-        }
-
-        private void CreateEntities()
-        {
-            // Create Fruits
-            for (int i = 0; i < world.WorldConfig.FruitsPerDay; i++)
-            {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Fruit(position.Item1, position.Item2));
-            }
             // Create Rabbits
             for (int i = 0; i < world.WorldConfig.RabbitConfig.InitialPopulation; i++)
             {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Rabbit(position.Item1, position.Item2));
+                world.AddEntity(new Rabbit(StaticRandom.GenerateRandomPosition()));
             }
             // Create Wolves
             for (int i = 0; i < world.WorldConfig.WolvesConfig.InitialPopulation; i++)
             {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Wolf(position.Item1, position.Item2));
+                world.AddEntity(new Wolf(StaticRandom.GenerateRandomPosition()));
             }
         }
 
@@ -115,8 +115,15 @@ namespace Rabbit_Island
 
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
+            if (world.WorldConfig.SelectedOffspringGenerationMethod is World.GenerateOffspringMethod)
+            {
+                World.GenerateOffspring = world.WorldConfig.SelectedOffspringGenerationMethod;
+            }
+            // Scale values in simulation to TimeRate
+            Rabbit.RaceValues.RefreshValues();
+            // TODO The same for wolves
 
-            CreateEntities();
+            CreateInitialCreatures();
 
             var simulationWindow = new SimulationWindow();
             var graphsWindow = new GraphsWindow();

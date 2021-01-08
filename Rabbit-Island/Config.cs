@@ -6,6 +6,7 @@ namespace Rabbit_Island
 {
     internal class Config
     {
+        // TODO Add check for invalid values (or too big/small)
         public interface ICreatureConfig<Creature> where Creature : Entities.Creature
         {
             public Type CreatureType { get; set; }
@@ -54,6 +55,8 @@ namespace Rabbit_Island
         public bool FoodExpires { get; set; }
 
         public bool DrawRanges { get; set; }
+
+        public World.GenerateOffspringMethod? SelectedOffspringGenerationMethod { get; set; }
 
         public (int, int) MapSize
         {

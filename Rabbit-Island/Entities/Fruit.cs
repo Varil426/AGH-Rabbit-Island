@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Numerics;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -7,6 +8,10 @@ namespace Rabbit_Island.Entities
     internal class Fruit : Entity
     {
         public Fruit(float x, float y) : base(x, y)
+        {
+        }
+
+        public Fruit(Vector2 position) : base(position)
         {
         }
 

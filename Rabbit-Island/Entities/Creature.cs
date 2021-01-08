@@ -1,28 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 using System.Threading;
 
 namespace Rabbit_Island.Entities
 {
     internal abstract class Creature : Entity, ICreature
     {
-        protected Creature(float x, float y) : base(x, y)
+        protected Creature(Vector2 position) : base(position)
         {
             States = new HashSet<State>();
             States.Add(State.Alive);
 
-            Random random = new Random();
             Array values = Enum.GetValues(typeof(GenderType));
-            Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
+            Gender = (GenderType)values.GetValue(StaticRandom.Generator.Next(values.Length))!;
 
-            _energyDrain = 10;
+            InteractionEvent = new AutoResetEvent(false);
+
+            _energyDrain = 2;
 
             _timeOfLastAction = DateTime.Now;
+            _movingSince = DateTime.Now;
+            _moveDirection = new RelativePosition(this, RelativePosition.Direction.North);
         }
 
         protected DateTime _timeOfLastAction;
+
+        protected Thread? _creatureThread;
+
+        protected DateTime _movingSince;
+
+        protected RelativePosition _moveDirection;
+
+        public Thread? CreatureThread
+        {
+            get => _creatureThread;
+            set
+            {
+                if (_creatureThread == null)
+                    _creatureThread = value;
+            }
+        }
+
+        protected AutoResetEvent InteractionEvent { get; }
 
         protected void Move(Entity destination)
         {
@@ -37,7 +57,14 @@ namespace Rabbit_Island.Entities
             var direction = Vector2.Normalize(destination - Position);
 
             var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
-            Position = Position + direction * (float)distance;
+            var newPosition = Position + direction * (float)distance;
+            if (newPosition.X <= World.Instance.WorldMap.Size.Item1
+                && newPosition.X >= 0
+                && newPosition.Y <= World.Instance.WorldMap.Size.Item2
+                && newPosition.Y >= 0)
+            {
+                Position = newPosition;
+            }
         }
 
         public enum State
@@ -50,7 +77,8 @@ namespace Rabbit_Island.Entities
             Alive,
             Dead,
             SearchingForFood,
-            Mating
+            Mating,
+            WaitingToMate
         }
 
         public enum GenderType
@@ -58,6 +86,10 @@ namespace Rabbit_Island.Entities
             Male,
             Female
         }
+
+        public bool WaitingToMate => States.Contains(State.WaitingToMate);
+
+        public bool IsPregnant => States.Contains(State.Pregnant);
 
         /// <summary>
         /// Energy drain per real time minute
@@ -85,6 +117,14 @@ namespace Rabbit_Island.Entities
 
         public DateTime DeathAt { get; protected set; }
 
+        public DateTime PregnantAt { get; protected set; }
+
+        public Creature? PregnantWith { get; protected set; }
+
+        public bool IsAlive => States.Contains(State.Alive) ?
+            States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true
+            : false;
+
         protected virtual void UpdateStateSelf()
         {
             // TODO Change this
@@ -95,14 +135,27 @@ namespace Rabbit_Island.Entities
 
             if (Energy <= 0)
             {
-                States.Remove(State.Alive);
-                States.Add(State.Dead);
+                Die();
             }
         }
 
         protected abstract Action Think(List<Entity> closeByEntities);
 
         protected abstract void PerformAction(Action action);
+
+        protected void Die()
+        {
+            if (IsAlive)
+            {
+                States.Remove(State.Alive);
+                States.Add(State.Dead);
+                DeathAt = DateTime.Now;
+            }
+            else
+            {
+                throw new Exception("Die() was called on not alive creature");
+            }
+        }
 
         private List<Entity> GetCloseByEntites()
         {
@@ -132,7 +185,7 @@ namespace Rabbit_Island.Entities
 
         public void Act()
         {
-            while (States.Contains(State.Alive))
+            while (IsAlive)
             {
                 var closeByEntites = GetCloseByEntites();
                 UpdateStateSelf();
