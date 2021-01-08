@@ -19,6 +19,8 @@ namespace Rabbit_Island
 
         static World()
         {
+            // Assign default offspring generation method
+            GenerateOffspring = OffspringGeneration.BasicOffspringGeneration;
         }
 
         private World()
@@ -36,6 +38,10 @@ namespace Rabbit_Island
             }
         }
 
+        /// <summary>
+        /// Adds entity to the world.
+        /// </summary>
+        /// <param name="entity">Entity to be added to the world.</param>
         public void AddEntity(Entity entity)
         {
             lock (_entities)
@@ -44,16 +50,45 @@ namespace Rabbit_Island
             }
         }
 
-        public void RemoveEntity(Entity entity)
+        /// <summary>
+        /// Adds and starts thread for creature.
+        /// </summary>
+        /// <param name="creature">Creature to be added to the world.</param>
+        public void AddCreature(Creature creature)
         {
             lock (_entities)
             {
-                _entities.Remove(entity);
+                var th = new Thread(creature.Act)
+                {
+                    IsBackground = true
+                };
+                creature.CreatureThread = th;
+                th.Start();
+            }
+        }
+
+        /// <summary>
+        /// Removes entity from the world.
+        /// </summary>
+        /// <param name="entity">Entity to be removed.</param>
+        /// <returns>Returs if operation was successful.</returns>
+        public bool RemoveEntity(Entity entity)
+        {
+            lock (_entities)
+            {
+                return _entities.Remove(entity);
             }
         }
 
         public void StartSimulation()
         {
+            var directorThread = new Thread(Director.Instance.Run)
+            {
+                Name = "Director Thread",
+                IsBackground = true
+            };
+            directorThread.Start();
+
             // TODO Move it to fields
             var threads = new List<Thread>();
             foreach (ICreature creature in _entities.Where(x => x is ICreature))
@@ -105,5 +140,9 @@ namespace Rabbit_Island
             get => _worldMap;
             set => _worldMap = value;
         }
+
+        public delegate List<Creature> GenerateOffspringMethod(Creature mother, Creature father);
+
+        public static GenerateOffspringMethod GenerateOffspring;
     }
 }
