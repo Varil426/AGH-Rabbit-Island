@@ -67,11 +67,16 @@ namespace Rabbit_Island
             }
         }
 
-        public void RemoveEntity(Entity entity)
+        /// <summary>
+        /// Removes entity from the world.
+        /// </summary>
+        /// <param name="entity">Entity to be removed.</param>
+        /// <returns>Returs if operation was successful.</returns>
+        public bool RemoveEntity(Entity entity)
         {
             lock (_entities)
             {
-                _entities.Remove(entity);
+                return _entities.Remove(entity);
             }
         }
 

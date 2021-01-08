@@ -118,11 +118,13 @@ namespace Rabbit_Island.Entities
 
                 case ActionType.Eat:
                     Thread.Sleep(RaceValues.EatingTime);
-                    var energy = Energy + 50;
-                    if (energy > MaxEnergy)
-                        energy = MaxEnergy;
-                    Energy = energy;
-                    World.Instance.RemoveEntity(action.Target);
+                    if (World.Instance.RemoveEntity(action.Target))
+                    {
+                        var energy = Energy + 50;
+                        if (energy > MaxEnergy)
+                            energy = MaxEnergy;
+                        Energy = energy;
+                    }
                     break;
 
                 case ActionType.Mate:
