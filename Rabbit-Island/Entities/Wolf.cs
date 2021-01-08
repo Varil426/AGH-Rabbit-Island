@@ -112,11 +112,11 @@ namespace Rabbit_Island.Entities
                 case ActionType.Eat:
                     /* 
                     - zatrzymuje się na określony czas - zdefiniowany EatingTime
-                    - usuwany jest obiekt Królika (powinien mieć takie same współrzędne) 
+                    - usuwany jest obiekt królika
                     - Energia jest dodawana
                      */
                     Thread.Sleep(RaceValues.EatingTime);
-                    if (World.Instance.RemoveEntity(action.Target)) //TODO tak na pewno?
+                    if (World.Instance.RemoveEntity(action.Target)) //TODO usuwanie wątku królika
                     {
                         var energy = Energy + 50;
                         if (energy > MaxEnergy)
@@ -156,9 +156,10 @@ namespace Rabbit_Island.Entities
                         }
                     }
                     break;
-                    throw new NotImplementedException();
+
                 case ActionType.Nothing:
                     break;
+
                 default:
                     throw new Exception("Illegal action");
             }
@@ -218,6 +219,7 @@ namespace Rabbit_Island.Entities
                     return new Action(ActionType.MoveTo, anotherWolf);
                 } 
             }
+
             return new Action(ActionType.Nothing, this);
 
             // var destination = new Vector2(400, 400);
