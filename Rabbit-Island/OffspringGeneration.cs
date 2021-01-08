@@ -49,7 +49,22 @@ namespace Rabbit_Island
             }
             else if (mother is Wolf wolfMother && father is Wolf wolfFather)
             {
-                // TODO
+                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.WolvesConfig.MaxChildren);
+                for (int i = 0; i < offspringNumber; i++)
+                {
+                    var nearbyLocation = GenerateNearbyLocation(mother);
+                    Wolf chosenParent;
+                    if (StaticRandom.Generator.Next(2) == 0)
+                    {
+                        chosenParent = wolfMother;
+                    }
+                    else
+                    {
+                        chosenParent = wolfFather;
+                    }
+                    var child = new Wolf(nearbyLocation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange);
+                    offspring.Add(child);
+                }
             }
             return offspring;
         }

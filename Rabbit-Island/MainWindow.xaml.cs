@@ -121,8 +121,7 @@ namespace Rabbit_Island
             }
             // Scale values in simulation to TimeRate
             Rabbit.RaceValues.RefreshValues();
-            // TODO The same for wolves
-
+            Wolf.RaceValues.RefreshValues();        
             CreateInitialCreatures();
 
             var simulationWindow = new SimulationWindow();
