@@ -7,14 +7,13 @@ namespace Rabbit_Island.Entities
 {
     internal abstract class Creature : Entity, ICreature
     {
-        protected Creature(float x, float y) : base(x, y)
+        protected Creature(Vector2 position) : base(position)
         {
             States = new HashSet<State>();
             States.Add(State.Alive);
 
-            Random random = new Random();
             Array values = Enum.GetValues(typeof(GenderType));
-            Gender = (GenderType)values.GetValue(random.Next(values.Length))!;
+            Gender = (GenderType)values.GetValue(StaticRandom.Generator.Next(values.Length))!;
 
             InteractionEvent = new AutoResetEvent(false);
 

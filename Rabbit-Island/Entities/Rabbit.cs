@@ -52,22 +52,21 @@ namespace Rabbit_Island.Entities
             public static int MoveInOneDirectionTime { get; private set; }
         }
 
-        public Rabbit(float x, float y) : base(x, y)
+        public Rabbit(Vector2 position) : base(position)
         {
-            Random random = new Random();
-            MaxHealth = random.Next(90, 110);
+            MaxHealth = StaticRandom.Generator.Next(90, 110);
             Health = MaxHealth;
-            MaxEnergy = random.Next(90, 110);
+            MaxEnergy = StaticRandom.Generator.Next(90, 110);
             Energy = MaxEnergy;
-            SightRange = random.Next(25, 50);
-            MovementSpeed = random.Next(5, 20);
-            InteractionRange = random.Next(10);
-            Fear = random.Next(10);
+            SightRange = StaticRandom.Generator.Next(25, 50);
+            MovementSpeed = StaticRandom.Generator.Next(5, 20);
+            InteractionRange = StaticRandom.Generator.Next(10);
+            Fear = StaticRandom.Generator.Next(10);
         }
 
         public Rabbit(
             Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange,
-            int fear) : base(position.X, position.Y)
+            int fear) : base(position)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;

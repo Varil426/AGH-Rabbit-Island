@@ -14,6 +14,8 @@ namespace Rabbit_Island
     {
         private World world = World.Instance;
 
+        // TODO Add check for invalid values (or too big/small)
+
         public MainWindow()
         {
             InitializeComponent();
@@ -93,27 +95,17 @@ namespace Rabbit_Island
             return config;
         }
 
-        private (float, float) GenerateRandomPosition()
-        {
-            Random random = new Random();
-            float x = random.Next(world.WorldMap.Size.Item1);
-            float y = random.Next(world.WorldMap.Size.Item2);
-            return (x, y);
-        }
-
         private void CreateInitialCreatures()
         {
             // Create Rabbits
             for (int i = 0; i < world.WorldConfig.RabbitConfig.InitialPopulation; i++)
             {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Rabbit(position.Item1, position.Item2));
+                world.AddEntity(new Rabbit(StaticRandom.GenerateRandomPosition()));
             }
             // Create Wolves
             for (int i = 0; i < world.WorldConfig.WolvesConfig.InitialPopulation; i++)
             {
-                var position = GenerateRandomPosition();
-                world.AddEntity(new Wolf(position.Item1, position.Item2));
+                world.AddEntity(new Wolf(StaticRandom.GenerateRandomPosition()));
             }
         }
 

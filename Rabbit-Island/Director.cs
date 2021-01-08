@@ -30,14 +30,6 @@ namespace Rabbit_Island
             world = World.Instance;
         }
 
-        private (float, float) GenerateRandomPosition()
-        {
-            Random random = new Random();
-            float x = random.Next(world.WorldMap.Size.Item1);
-            float y = random.Next(world.WorldMap.Size.Item2);
-            return (x, y);
-        }
-
         public void Run()
         {
             lock (this)
@@ -71,8 +63,7 @@ namespace Rabbit_Island
                     // Add new fruits
                     for (int i = 0; i < fruitsPerDay; i++)
                     {
-                        var randomPosition = GenerateRandomPosition();
-                        var newFruit = new Fruit(randomPosition.Item1, randomPosition.Item2);
+                        var newFruit = new Fruit(StaticRandom.GenerateRandomPosition());
                         world.AddEntity(newFruit);
                     }
                     Thread.Sleep(dayDuration);

@@ -12,7 +12,7 @@ namespace Rabbit_Island
     {
         private static Vector2 GenerateNearbyLocation(Creature creature)
         {
-            var random = new Random();
+            var random = StaticRandom.Generator;
             var location = new Vector2();
             location.X = random.Next((int)creature.Position.X - 5, (int)creature.Position.X + 5);
             location.Y = random.Next((int)creature.Position.Y - 5, (int)creature.Position.Y + 5);
@@ -28,15 +28,14 @@ namespace Rabbit_Island
         public static List<Creature> BasicOffspringGeneration(Creature mother, Creature father)
         {
             var offspring = new List<Creature>();
-            var random = new Random();
             if (mother is Rabbit rabbitMother && father is Rabbit rabbitFather)
             {
-                var offspringNumber = random.Next(World.Instance.WorldConfig.RabbitConfig.MaxChildren);
+                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.RabbitConfig.MaxChildren);
                 for (int i = 0; i < offspringNumber; i++)
                 {
                     var nearbyLocation = GenerateNearbyLocation(mother);
                     Rabbit chosenParent;
-                    if (random.Next(2) == 0)
+                    if (StaticRandom.Generator.Next(2) == 0)
                     {
                         chosenParent = rabbitMother;
                     }
