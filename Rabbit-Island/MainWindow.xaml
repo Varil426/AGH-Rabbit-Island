@@ -19,7 +19,9 @@
             <GroupBox.Header>Rabbits Config</GroupBox.Header>
             <StackPanel>
                 <Label>Initial Population</Label>
-                <TextBox Name="RabbitsInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="10" />
+                <TextBox Name="RabbitsInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="20" />
+                <Label>Pregnancy Duration (Days)</Label>
+                <TextBox Name="RabbitsPregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Min Children</Label>
                 <TextBox Name="RabbitsMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Max Children</Label>
@@ -30,7 +32,9 @@
             <GroupBox.Header>Wolves Config</GroupBox.Header>
             <StackPanel>
                 <Label>Initial Population</Label>
-                <TextBox Name="WolvesInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="10" />
+                <TextBox Name="WolvesInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="8" />
+                <Label>Pregnancy Duration (Days)</Label>
+                <TextBox Name="WolvesPregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
                 <Label>Min Children</Label>
                 <TextBox Name="WolvesMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Max Children</Label>
@@ -41,7 +45,7 @@
             <GroupBox.Header>General Config</GroupBox.Header>
             <StackPanel>
                 <Label Name="TimeRateLabel">Time Rate</Label>
-                <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" TextChanged="TimeRateChange" Text="1000" />
+                <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" TextChanged="TimeRateChange" Text="1800" />
                 <Label>Death From Old Age</Label>
                 <CheckBox Name="DeathFromOldAgeInput" IsChecked="True" />
                 <Label>Max Creatures</Label>
@@ -54,8 +58,6 @@
                 <ComboBox Name="OffspringGenerationMethodInput">
                     <ComboBoxItem IsSelected="True">Basic Offspring Generation Method</ComboBoxItem>
                 </ComboBox>
-                <Label>Pregnancy Duration (Days)</Label>
-                <TextBox Name="PregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
                 <Label>Food Expires</Label>
                 <CheckBox Name="FoodExpiresInput" IsChecked="True" />
                 <Label>Draw Ranges</Label>

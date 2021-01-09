@@ -144,6 +144,8 @@ namespace Rabbit_Island.Entities
 
         protected abstract void UpdatePregnancyStatus();
 
+        protected abstract void DeathFromOldAge();
+
         public bool IsAlive => States.Contains(State.Alive) ?
             States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true
             : false;
@@ -151,6 +153,7 @@ namespace Rabbit_Island.Entities
         protected virtual void UpdateStateSelf()
         {
             UpdatePregnancyStatus();
+            DeathFromOldAge();
             // TODO Change this
             var timeRate = World.Instance.WorldConfig.TimeRate;
             var timeDiff = (DateTime.Now - _timeOfLastAction).TotalMinutes * timeRate;

@@ -47,17 +47,18 @@ namespace Rabbit_Island
             var rabbitsInitialPopulation = int.Parse(RabbitsInitialPopulationInput.Text);
             var rabbitsMinChildren = int.Parse(RabbitsMinChildrenInput.Text);
             var rabbitsMaxChildren = int.Parse(RabbitsMaxChildrenInput.Text);
+            var rabbitsPregnancyDuration = int.Parse(RabbitsPregnancyDurationInput.Text);
 
             var wolvesInitialPopulation = int.Parse(WolvesInitialPopulationInput.Text);
             var wolvesMinChildren = int.Parse(WolvesMinChildrenInput.Text);
             var wolvesMaxChildren = int.Parse(WolvesMaxChildrenInput.Text);
+            var wolvesPregnancyDuration = int.Parse(WolvesPregnancyDurationInput.Text);
 
             var timeRate = double.Parse(TimeRateInput.Text);
             var deathFromOldAge = (bool)DeathFromOldAgeInput.IsChecked!;
             var maxCreatures = int.Parse(MaxCreaturesInput.Text);
             var fruitsPerDay = int.Parse(FruitsPerDayInput.Text);
             var mapSize = int.Parse(MapSizeInput.Text);
-            var pregnancyDuration = int.Parse(PregnancyDurationInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
 
             World.GenerateOffspringMethod generateOffspringMethod;
@@ -78,7 +79,6 @@ namespace Rabbit_Island
                 DeathFromOldAge = deathFromOldAge,
                 MaxCreatures = maxCreatures,
                 FruitsPerDay = fruitsPerDay,
-                PregnancyDuration = pregnancyDuration,
                 DrawRanges = drawRanges,
                 MapSize = (mapSize, mapSize),
                 SelectedOffspringGenerationMethod = generateOffspringMethod
@@ -87,10 +87,12 @@ namespace Rabbit_Island
             config.RabbitConfig.InitialPopulation = rabbitsInitialPopulation;
             config.RabbitConfig.MinChildren = rabbitsMinChildren;
             config.RabbitConfig.MaxChildren = rabbitsMaxChildren;
+            config.RabbitConfig.PregnancyDuration = rabbitsPregnancyDuration;
 
             config.WolvesConfig.InitialPopulation = wolvesInitialPopulation;
             config.WolvesConfig.MinChildren = wolvesMinChildren;
             config.WolvesConfig.MaxChildren = wolvesMaxChildren;
+            config.WolvesConfig.PregnancyDuration = wolvesPregnancyDuration;
 
             return config;
         }
@@ -121,7 +123,7 @@ namespace Rabbit_Island
             }
             // Scale values in simulation to TimeRate
             Rabbit.RaceValues.RefreshValues();
-            Wolf.RaceValues.RefreshValues();        
+            Wolf.RaceValues.RefreshValues();
             CreateInitialCreatures();
 
             var simulationWindow = new SimulationWindow();

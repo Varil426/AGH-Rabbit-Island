@@ -62,9 +62,12 @@ namespace Rabbit_Island
                 {
                     IsBackground = true
                 };
-                AddEntity(creature);
-                creature.CreatureThread = th;
-                th.Start();
+                if (_entities.OfType<Creature>().Count() < WorldConfig.MaxCreatures)
+                {
+                    AddEntity(creature);
+                    creature.CreatureThread = th;
+                    th.Start();
+                }
             }
         }
 

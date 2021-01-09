@@ -50,7 +50,7 @@ namespace Rabbit_Island
                                 world.RemoveEntity(fruit);
                             }
                         });
-
+                        // Remove dead creatures
                         world.GetAllEntities().FindAll(entity => entity is Creature).ForEach(entity =>
                         {
                             var creature = entity as Creature;

@@ -10,6 +10,7 @@ namespace Rabbit_Island.Entities
 {
     internal class Wolf : Creature
     {
+        // TODO Move this and rabbits race values to common class from which that class derives
         public static class RaceValues
         {
             /// <summary>
@@ -19,11 +20,12 @@ namespace Rabbit_Island.Entities
             {
                 // Time in seconds scaled to simulation time rate
                 var timeScalar = 1000 / World.Instance.WorldConfig.TimeRate;
-                EatingTime = (int)(120 * timeScalar); //TODO może zwiększyć czas
+                EatingTime = (int)(180 * timeScalar);
                 MatingTime = (int)(300 * timeScalar);
                 WaitToMateTime = (int)(50 * timeScalar);
-                PregnancyTime = (int)(3600 * 24 * 2 * timeScalar);
+                PregnancyTime = (int)(3600 * 24 * World.Instance.WorldConfig.WolvesConfig.PregnancyDuration * timeScalar);
                 MoveInOneDirectionTime = (int)(300 * timeScalar);
+                LifeExpectancy = (int)(3600 * 24 * 15 * timeScalar); // TODO Create config input for that value (now 15 days)
             }
 
             /// <summary>
@@ -50,6 +52,11 @@ namespace Rabbit_Island.Entities
             /// Represents how long wolf should move in one direction while searching for rabbit. (Scaled to simulation time rate)
             /// </summary>
             public static int MoveInOneDirectionTime { get; private set; }
+
+            /// <summary>
+            /// Represents how long should rabbit live until death from natural causes. (Scaled to simulation time rate)
+            /// </summary>
+            public static int LifeExpectancy { get; private set; }
         }
 
         public Wolf(Vector2 position) : base(position)
@@ -58,9 +65,9 @@ namespace Rabbit_Island.Entities
             Health = MaxHealth;
             MaxEnergy = StaticRandom.Generator.Next(90, 110);
             Energy = MaxEnergy;
-            SightRange = StaticRandom.Generator.Next(10, 50);
+            SightRange = StaticRandom.Generator.Next(25, 50);
             MovementSpeed = StaticRandom.Generator.Next(5, 20);
-            InteractionRange = StaticRandom.Generator.Next(10);
+            InteractionRange = StaticRandom.Generator.Next(4, 8);
             Attack = StaticRandom.Generator.Next(30, 120);
         }
 
@@ -274,6 +281,14 @@ namespace Rabbit_Island.Entities
         {
             // TODO Add wolf specific states updates
             base.UpdateStateSelf();
+        }
+
+        protected override void DeathFromOldAge()
+        {
+            if (World.Instance.WorldConfig.DeathFromOldAge && CreatedAt.AddMilliseconds(RaceValues.LifeExpectancy) <= DateTime.Now)
+            {
+                Die();
+            }
         }
     }
 }

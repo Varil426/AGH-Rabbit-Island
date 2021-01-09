@@ -9,9 +9,7 @@ namespace Rabbit_Island
     /// </summary>
     internal static class StaticRandom
     {
-        private static int seed = Environment.TickCount;
-
-        private static readonly ThreadLocal<Random> _random = new ThreadLocal<Random>(() => new Random(seed));
+        private static readonly ThreadLocal<Random> _random = new ThreadLocal<Random>(() => new Random());
 
         public static Random Generator => _random.Value!;
 
