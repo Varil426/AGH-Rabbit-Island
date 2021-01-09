@@ -10,5 +10,29 @@ namespace Rabbit_Island.Entities
         public void Act();
 
         public Thread? CreatureThread { get; set; }
+
+        public float Health { get; }
+
+        public float Energy { get; }
+
+        public float SightRange { get; }
+
+        public float InteractionRange { get; }
+
+        public double MovementSpeed { get; }
+
+        public Creature.GenderType Gender { get; }
+
+        public HashSet<Creature.State> States { get; }
+
+        public DateTime DeathAt { get; }
+
+        public bool IsAlive { get; }
+
+        public DateTime PregnantAt { get; }
+
+        public Creature? PregnantWith { get; }
+
+        public void LoseHealth(float damage);
     }
 }

@@ -17,7 +17,7 @@ namespace Rabbit_Island.Entities
 
             InteractionEvent = new AutoResetEvent(false);
 
-            _energyDrain = 2;
+            _energyDrain = 0.1f;
 
             _timeOfLastAction = DateTime.Now;
             _movingSince = DateTime.Now;
@@ -92,15 +92,15 @@ namespace Rabbit_Island.Entities
         public bool IsPregnant => States.Contains(State.Pregnant);
 
         /// <summary>
-        /// Energy drain per real time minute
+        /// Energy drain per minute.
         /// </summary>
         protected readonly float _energyDrain;
 
         public float MaxHealth { get; protected set; }
-        public float Health { get; set; }
+        public float Health { get; protected set; }
 
         public float MaxEnergy { get; protected set; }
-        public float Energy { get; set; }
+        public float Energy { get; protected set; }
 
         public float SightRange { get; protected set; }
 
@@ -129,11 +129,11 @@ namespace Rabbit_Island.Entities
         {
             // TODO Change this
             var timeRate = World.Instance.WorldConfig.TimeRate;
-            var timeDiff = (DateTime.Now - _timeOfLastAction).TotalMinutes;
+            var timeDiff = (DateTime.Now - _timeOfLastAction).TotalMinutes * timeRate;
 
-            Energy -= (float)(_energyDrain * timeDiff * timeRate);
+            Energy -= (float)(_energyDrain * timeDiff);
 
-            if (Energy <= 0)
+            if (Energy <= 0 || Health <= 0)
             {
                 Die();
             }
@@ -167,6 +167,7 @@ namespace Rabbit_Island.Entities
             MoveTo,
             Eat,
             Mate,
+            Attack,
             Nothing
         }
 
@@ -193,6 +194,14 @@ namespace Rabbit_Island.Entities
                 PerformAction(action);
                 _timeOfLastAction = DateTime.Now;
                 Thread.Sleep(20);
+            }
+        }
+
+        public void LoseHealth(float damage)
+        {
+            lock (this)
+            {
+                Health -= damage;
             }
         }
     }

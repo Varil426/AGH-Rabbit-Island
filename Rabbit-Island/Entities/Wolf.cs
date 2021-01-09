@@ -61,8 +61,10 @@ namespace Rabbit_Island.Entities
             SightRange = StaticRandom.Generator.Next(50);
             MovementSpeed = StaticRandom.Generator.Next(5, 20);
             InteractionRange = StaticRandom.Generator.Next(10);
+            Attack = StaticRandom.Generator.Next(30, 120);
         }
-        public Wolf(Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange) : base(position)
+
+        public Wolf(Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange, int attack) : base(position)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
@@ -71,7 +73,10 @@ namespace Rabbit_Island.Entities
             SightRange = sightRange;
             MovementSpeed = movementSpeed;
             InteractionRange = interactionRange;
+            Attack = attack;
         }
+
+        public int Attack { get; }
 
         public override void DrawSelf(Canvas canvas)
         {
@@ -109,12 +114,18 @@ namespace Rabbit_Island.Entities
                     Move(action.Target);
                     break;
 
+                case ActionType.Attack:
+                    if (action.Target is Creature creature)
+                    {
+                        creature.LoseHealth(Attack);
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid target");
+                    }
+                    break;
+
                 case ActionType.Eat:
-                    /* 
-                    - zatrzymuje się na określony czas - zdefiniowany EatingTime
-                    - usuwany jest obiekt królika
-                    - Energia jest dodawana
-                     */
                     Thread.Sleep(RaceValues.EatingTime);
                     if (World.Instance.RemoveEntity(action.Target)) //TODO usuwanie wątku królika
                     {
@@ -178,11 +189,17 @@ namespace Rabbit_Island.Entities
                 if (closeByEntities.Find(entity => entity is Rabbit) is Rabbit rabbit)
                 {
                     // sprawdza czy królik jest w zasięgu interakcji:
-                    if (Vector2.Distance(this.Position, rabbit.Position) <= this.InteractionRange)
+                    if (Vector2.Distance(this.Position, rabbit.Position) <= InteractionRange)
                     {
-                        // jeśli jest zmienia akcję na Eat:
-                        States.Remove(State.SearchingForFood);
-                        return new Action(ActionType.Eat, rabbit);
+                        if (rabbit.IsAlive)
+                        {
+                            return new Action(ActionType.Attack, rabbit);
+                        }
+                        else
+                        {
+                            States.Remove(State.SearchingForFood);
+                            return new Action(ActionType.Eat, rabbit);
+                        }
                     }
                     // jeśli nie jest wtedy wilk goni królika:
                     return new Action(ActionType.MoveTo, rabbit);
@@ -217,7 +234,7 @@ namespace Rabbit_Island.Entities
                     }
                     // jeśli nie jest wtedy wilk goni anotherWolf:
                     return new Action(ActionType.MoveTo, anotherWolf);
-                } 
+                }
             }
 
             return new Action(ActionType.Nothing, this);
@@ -248,7 +265,6 @@ namespace Rabbit_Island.Entities
             base.UpdateStateSelf();
 
             UpdatePregnancyStatus();
-
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Rabbit_Island
                     {
                         chosenParent = wolfFather;
                     }
-                    var child = new Wolf(nearbyLocation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange);
+                    var child = new Wolf(nearbyLocation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange, chosenParent.Attack);
                     offspring.Add(child);
                 }
             }
