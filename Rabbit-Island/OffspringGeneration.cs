@@ -30,7 +30,7 @@ namespace Rabbit_Island
             var offspring = new List<Creature>();
             if (mother is Rabbit rabbitMother && father is Rabbit rabbitFather)
             {
-                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.RabbitConfig.MaxChildren);
+                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.RabbitConfig.MinChildren, World.Instance.WorldConfig.RabbitConfig.MaxChildren);
                 for (int i = 0; i < offspringNumber; i++)
                 {
                     var nearbyLocation = GenerateNearbyLocation(mother);
@@ -49,7 +49,7 @@ namespace Rabbit_Island
             }
             else if (mother is Wolf wolfMother && father is Wolf wolfFather)
             {
-                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.WolvesConfig.MaxChildren);
+                var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.WolvesConfig.MinChildren, World.Instance.WorldConfig.WolvesConfig.MaxChildren);
                 for (int i = 0; i < offspringNumber; i++)
                 {
                     var nearbyLocation = GenerateNearbyLocation(mother);

@@ -62,6 +62,7 @@ namespace Rabbit_Island
                 {
                     IsBackground = true
                 };
+                AddEntity(creature);
                 creature.CreatureThread = th;
                 th.Start();
             }

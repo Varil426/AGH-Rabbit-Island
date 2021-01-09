@@ -18,12 +18,12 @@ namespace Rabbit_Island.Entities
             public static void RefreshValues()
             {
                 // Time in seconds scaled to simulation time rate
-                int timeScalar = 1000 / (int)World.Instance.WorldConfig.TimeRate;
-                EatingTime = 120 * timeScalar; //TODO może zwiększyć czas
-                MatingTime = 300 * timeScalar;
-                WaitToMateTime = 50 * timeScalar;
-                PregnancyTime = 3600 * 24 * 3 * timeScalar;
-                MoveInOneDirectionTime = 300 * timeScalar;
+                var timeScalar = 1000 / World.Instance.WorldConfig.TimeRate;
+                EatingTime = (int)(120 * timeScalar); //TODO może zwiększyć czas
+                MatingTime = (int)(300 * timeScalar);
+                WaitToMateTime = (int)(50 * timeScalar);
+                PregnancyTime = (int)(3600 * 24 * 2 * timeScalar);
+                MoveInOneDirectionTime = (int)(300 * timeScalar);
             }
 
             /// <summary>
@@ -58,7 +58,7 @@ namespace Rabbit_Island.Entities
             Health = MaxHealth;
             MaxEnergy = StaticRandom.Generator.Next(90, 110);
             Energy = MaxEnergy;
-            SightRange = StaticRandom.Generator.Next(50);
+            SightRange = StaticRandom.Generator.Next(10, 50);
             MovementSpeed = StaticRandom.Generator.Next(5, 20);
             InteractionRange = StaticRandom.Generator.Next(10);
             Attack = StaticRandom.Generator.Next(30, 120);
@@ -185,10 +185,8 @@ namespace Rabbit_Island.Entities
                 {
                     _movingSince = DateTime.Now;
                 }
-                // sprawdza czy w zasięgu wzroku jest królik:
                 if (closeByEntities.Find(entity => entity is Rabbit) is Rabbit rabbit)
                 {
-                    // sprawdza czy królik jest w zasięgu interakcji:
                     if (Vector2.Distance(this.Position, rabbit.Position) <= InteractionRange)
                     {
                         if (rabbit.IsAlive)
@@ -201,7 +199,6 @@ namespace Rabbit_Island.Entities
                             return new Action(ActionType.Eat, rabbit);
                         }
                     }
-                    // jeśli nie jest wtedy wilk goni królika:
                     return new Action(ActionType.MoveTo, rabbit);
                 }
                 else if (_movingSince.AddMilliseconds(RaceValues.MoveInOneDirectionTime) <= DateTime.Now)
@@ -217,33 +214,47 @@ namespace Rabbit_Island.Entities
                     return new Action(ActionType.MoveTo, _moveDirection);
                 }
             }
-            // sprawdza czy w zasięgu wzroku jest wilk:
             else if (closeByEntities.Find(entity => entity is Wolf wolf
                 && wolf.IsAlive
+                && wolf.CanMate
                 && wolf.Gender != Gender
                 && !wolf.IsPregnant
                 && !IsPregnant) is Wolf anotherWolf)
             {
-                // sprawdza czy anotherWolf jest innej płci
+                States.Remove(State.SearchingForMatingPartner);
                 if (this.Gender != anotherWolf.Gender)
                 {
-                    // sprawdza czy anotherWolf jest w zasięgu interakcji:
                     if (Vector2.Distance(this.Position, anotherWolf.Position) <= this.InteractionRange)
                     {
                         return new Action(ActionType.Mate, anotherWolf);
                     }
-                    // jeśli nie jest wtedy wilk goni anotherWolf:
                     return new Action(ActionType.MoveTo, anotherWolf);
+                }
+            }
+            else if (!States.Contains(State.Pregnant))
+            {
+                if (States.Add(State.SearchingForMatingPartner))
+                {
+                    _movingSince = DateTime.Now;
+                }
+                if (_movingSince.AddMilliseconds(RaceValues.MoveInOneDirectionTime) <= DateTime.Now)
+                {
+                    var possibleValues = Enum.GetValues(typeof(RelativePosition.Direction)).Length;
+                    var direction = (RelativePosition.Direction)StaticRandom.Generator.Next(possibleValues);
+                    _movingSince = DateTime.Now;
+                    _moveDirection = new RelativePosition(this, direction);
+                    return new Action(ActionType.MoveTo, _moveDirection);
+                }
+                else
+                {
+                    return new Action(ActionType.MoveTo, _moveDirection);
                 }
             }
 
             return new Action(ActionType.Nothing, this);
-
-            // var destination = new Vector2(400, 400);
-            // return new Action(ActionType.MoveTo, new Point(destination));
         }
 
-        protected void UpdatePregnancyStatus()
+        protected override void UpdatePregnancyStatus()
         {
             if (Gender == GenderType.Female
                 && States.Contains(State.Pregnant)
@@ -263,8 +274,6 @@ namespace Rabbit_Island.Entities
         {
             // TODO Add wolf specific states updates
             base.UpdateStateSelf();
-
-            UpdatePregnancyStatus();
         }
     }
 }

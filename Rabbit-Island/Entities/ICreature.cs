@@ -34,5 +34,7 @@ namespace Rabbit_Island.Entities
         public Creature? PregnantWith { get; }
 
         public void LoseHealth(float damage);
+
+        public bool CanMate { get; }
     }
 }

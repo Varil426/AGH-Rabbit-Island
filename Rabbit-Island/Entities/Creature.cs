@@ -44,6 +44,24 @@ namespace Rabbit_Island.Entities
 
         protected AutoResetEvent InteractionEvent { get; }
 
+        protected void MoveAway(Entity entityToMoveAwayFrom)
+        {
+            var now = DateTime.Now;
+            var timeDifference = now - _timeOfLastAction;
+
+            var direction = Vector2.Normalize(Position - entityToMoveAwayFrom.Position);
+
+            var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
+            var newPosition = Position + direction * (float)distance;
+            if (newPosition.X <= World.Instance.WorldMap.Size.Item1
+                && newPosition.X >= 0
+                && newPosition.Y <= World.Instance.WorldMap.Size.Item2
+                && newPosition.Y >= 0)
+            {
+                Position = newPosition;
+            }
+        }
+
         protected void Move(Entity destination)
         {
             Move(destination.Position);
@@ -78,7 +96,8 @@ namespace Rabbit_Island.Entities
             Dead,
             SearchingForFood,
             Mating,
-            WaitingToMate
+            WaitingToMate,
+            SearchingForMatingPartner
         }
 
         public enum GenderType
@@ -121,12 +140,17 @@ namespace Rabbit_Island.Entities
 
         public Creature? PregnantWith { get; protected set; }
 
+        public bool CanMate => CreatedAt.AddMilliseconds((1000 * 60 * 60) / World.Instance.WorldConfig.TimeRate) <= DateTime.Now;
+
+        protected abstract void UpdatePregnancyStatus();
+
         public bool IsAlive => States.Contains(State.Alive) ?
             States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true
             : false;
 
         protected virtual void UpdateStateSelf()
         {
+            UpdatePregnancyStatus();
             // TODO Change this
             var timeRate = World.Instance.WorldConfig.TimeRate;
             var timeDiff = (DateTime.Now - _timeOfLastAction).TotalMinutes * timeRate;
@@ -165,6 +189,7 @@ namespace Rabbit_Island.Entities
         protected enum ActionType
         {
             MoveTo,
+            MoveAway,
             Eat,
             Mate,
             Attack,

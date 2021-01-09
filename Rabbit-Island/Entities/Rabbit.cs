@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Windows.Controls;
@@ -18,12 +19,12 @@ namespace Rabbit_Island.Entities
             public static void RefreshValues()
             {
                 // Time in seconds scaled to simulation time rate
-                int timeScalar = 1000 / (int)World.Instance.WorldConfig.TimeRate;
-                EatingTime = 120 * timeScalar;
-                MatingTime = 300 * timeScalar;
-                WaitToMateTime = 50 * timeScalar;
-                PregnancyTime = 3600 * 24 * 3 * timeScalar;
-                MoveInOneDirectionTime = 300 * timeScalar;
+                var timeScalar = 1000 / World.Instance.WorldConfig.TimeRate;
+                EatingTime = (int)(120 * timeScalar);
+                MatingTime = (int)(300 * timeScalar);
+                WaitToMateTime = (int)(50 * timeScalar);
+                PregnancyTime = (int)(3600 * 24 * timeScalar);
+                MoveInOneDirectionTime = (int)(300 * timeScalar);
             }
 
             /// <summary>
@@ -116,6 +117,10 @@ namespace Rabbit_Island.Entities
                     Move(action.Target);
                     break;
 
+                case ActionType.MoveAway:
+                    MoveAway(action.Target);
+                    break;
+
                 case ActionType.Eat:
                     Thread.Sleep(RaceValues.EatingTime);
                     if (World.Instance.RemoveEntity(action.Target))
@@ -170,6 +175,10 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
+            if (closeByEntities.OfType<Wolf>().Any())
+            {
+                return new Action(ActionType.MoveAway, closeByEntities.OfType<Wolf>().First());
+            }
             if (Energy < MaxEnergy / 2)
             {
                 if (States.Add(State.SearchingForFood))
@@ -201,20 +210,40 @@ namespace Rabbit_Island.Entities
             else if (closeByEntities.Find(entity => entity is Rabbit rabbit
                 && rabbit.IsAlive
                 && rabbit.Gender != Gender
+                && rabbit.CanMate
                 && !rabbit.IsPregnant
                 && !IsPregnant) is Rabbit otherRabbit)
             {
-                // TODO Add ability to search for mating partner
+                States.Remove(State.SearchingForMatingPartner);
                 if (Vector2.Distance(Position, otherRabbit.Position) <= InteractionRange)
                 {
                     return new Action(ActionType.Mate, otherRabbit);
                 }
                 return new Action(ActionType.MoveTo, otherRabbit);
             }
+            else if (!States.Contains(State.Pregnant))
+            {
+                if (States.Add(State.SearchingForMatingPartner))
+                {
+                    _movingSince = DateTime.Now;
+                }
+                if (_movingSince.AddMilliseconds(RaceValues.MoveInOneDirectionTime) <= DateTime.Now)
+                {
+                    var possibleValues = Enum.GetValues(typeof(RelativePosition.Direction)).Length;
+                    var direction = (RelativePosition.Direction)StaticRandom.Generator.Next(possibleValues);
+                    _movingSince = DateTime.Now;
+                    _moveDirection = new RelativePosition(this, direction);
+                    return new Action(ActionType.MoveTo, _moveDirection);
+                }
+                else
+                {
+                    return new Action(ActionType.MoveTo, _moveDirection);
+                }
+            }
             return new Action(ActionType.Nothing, this);
         }
 
-        protected void UpdatePregnancyStatus()
+        protected override void UpdatePregnancyStatus()
         {
             if (Gender == GenderType.Female
                 && States.Contains(State.Pregnant)
@@ -235,7 +264,6 @@ namespace Rabbit_Island.Entities
             // TODO Add rabbit specific states updates
             base.UpdateStateSelf();
             // Rabbit specific status updates
-            UpdatePregnancyStatus();
         }
     }
 }
