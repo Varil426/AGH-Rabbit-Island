@@ -5,6 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rabbit_Island"
         mc:Ignorable="d"
-        Title="SimulationWindow" Height="600" Width="600">
+        Title="SimulationWindow" Height="900" Width="900">
     <Grid Name="Content" Margin="10" />
 </Window>

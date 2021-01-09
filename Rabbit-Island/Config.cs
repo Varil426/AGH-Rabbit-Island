@@ -18,6 +18,8 @@ namespace Rabbit_Island
             public int MaxChildren { get; set; }
 
             public int PregnancyDuration { get; set; }
+
+            public int LifeExpectancy { get; set; }
         }
 
         private class CreatureConfig<Creature> : ICreatureConfig<Creature> where Creature : Entities.Creature
@@ -35,6 +37,8 @@ namespace Rabbit_Island
 
             public int MaxChildren { get; set; }
             public int PregnancyDuration { get; set; }
+
+            public int LifeExpectancy { get; set; }
         }
 
         public Config()

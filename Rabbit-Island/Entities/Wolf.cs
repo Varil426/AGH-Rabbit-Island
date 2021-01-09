@@ -10,7 +10,6 @@ namespace Rabbit_Island.Entities
 {
     internal class Wolf : Creature
     {
-        // TODO Move this and rabbits race values to common class from which that class derives
         public static class RaceValues
         {
             /// <summary>
@@ -25,7 +24,7 @@ namespace Rabbit_Island.Entities
                 WaitToMateTime = (int)(50 * timeScalar);
                 PregnancyTime = (int)(3600 * 24 * World.Instance.WorldConfig.WolvesConfig.PregnancyDuration * timeScalar);
                 MoveInOneDirectionTime = (int)(300 * timeScalar);
-                LifeExpectancy = (int)(3600 * 24 * 15 * timeScalar); // TODO Create config input for that value (now 15 days)
+                LifeExpectancy = (int)(3600 * 24 * World.Instance.WorldConfig.WolvesConfig.LifeExpectancy * timeScalar);
             }
 
             /// <summary>
@@ -54,7 +53,7 @@ namespace Rabbit_Island.Entities
             public static int MoveInOneDirectionTime { get; private set; }
 
             /// <summary>
-            /// Represents how long should rabbit live until death from natural causes. (Scaled to simulation time rate)
+            /// Represents how long should wolf live until death from natural causes. (Scaled to simulation time rate)
             /// </summary>
             public static int LifeExpectancy { get; private set; }
         }

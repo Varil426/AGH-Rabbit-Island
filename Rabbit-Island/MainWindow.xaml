@@ -26,6 +26,8 @@
                 <TextBox Name="RabbitsMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Max Children</Label>
                 <TextBox Name="RabbitsMaxChildrenInput" PreviewTextInput="NumericTextBox" Text="6" />
+                <Label>Life Expectancy (Days)</Label>
+                <TextBox Name="RabbitsLifeExpectancy" PreviewTextInput="NumericTextBox" Text="10" />
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" Margin="10">
@@ -39,6 +41,8 @@
                 <TextBox Name="WolvesMinChildrenInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Max Children</Label>
                 <TextBox Name="WolvesMaxChildrenInput" PreviewTextInput="NumericTextBox" Text="6" />
+                <Label>Life Expectancy (Days)</Label>
+                <TextBox Name="WolvesLifeExpectancy" PreviewTextInput="NumericTextBox" Text="15" />
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
@@ -47,13 +51,13 @@
                 <Label Name="TimeRateLabel">Time Rate</Label>
                 <TextBox Name="TimeRateInput" PreviewTextInput="NumericTextBox" TextChanged="TimeRateChange" Text="1800" />
                 <Label>Death From Old Age</Label>
-                <CheckBox Name="DeathFromOldAgeInput" IsChecked="True" />
+                <CheckBox Name="DeathFromOldAgeInput" IsChecked="False" />
                 <Label>Max Creatures</Label>
                 <TextBox Name="MaxCreaturesInput" PreviewTextInput="NumericTextBox" Text="500" />
                 <Label>Fruits Per Day</Label>
                 <TextBox Name="FruitsPerDayInput" PreviewTextInput="NumericTextBox" Text="60" />
                 <Label>Map Size</Label>
-                <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="500" />
+                <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="800" />
                 <Label>Offspring Generation Method</Label>
                 <ComboBox Name="OffspringGenerationMethodInput">
                     <ComboBoxItem IsSelected="True">Basic Offspring Generation Method</ComboBoxItem>

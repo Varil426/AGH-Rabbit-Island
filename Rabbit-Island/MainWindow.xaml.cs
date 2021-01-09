@@ -48,11 +48,13 @@ namespace Rabbit_Island
             var rabbitsMinChildren = int.Parse(RabbitsMinChildrenInput.Text);
             var rabbitsMaxChildren = int.Parse(RabbitsMaxChildrenInput.Text);
             var rabbitsPregnancyDuration = int.Parse(RabbitsPregnancyDurationInput.Text);
+            var rabbitsLifeExpectancy = int.Parse(RabbitsLifeExpectancy.Text);
 
             var wolvesInitialPopulation = int.Parse(WolvesInitialPopulationInput.Text);
             var wolvesMinChildren = int.Parse(WolvesMinChildrenInput.Text);
             var wolvesMaxChildren = int.Parse(WolvesMaxChildrenInput.Text);
             var wolvesPregnancyDuration = int.Parse(WolvesPregnancyDurationInput.Text);
+            var wolvesLifeExpectancy = int.Parse(WolvesLifeExpectancy.Text);
 
             var timeRate = double.Parse(TimeRateInput.Text);
             var deathFromOldAge = (bool)DeathFromOldAgeInput.IsChecked!;
@@ -88,11 +90,13 @@ namespace Rabbit_Island
             config.RabbitConfig.MinChildren = rabbitsMinChildren;
             config.RabbitConfig.MaxChildren = rabbitsMaxChildren;
             config.RabbitConfig.PregnancyDuration = rabbitsPregnancyDuration;
+            config.RabbitConfig.LifeExpectancy = rabbitsLifeExpectancy;
 
             config.WolvesConfig.InitialPopulation = wolvesInitialPopulation;
             config.WolvesConfig.MinChildren = wolvesMinChildren;
             config.WolvesConfig.MaxChildren = wolvesMaxChildren;
             config.WolvesConfig.PregnancyDuration = wolvesPregnancyDuration;
+            config.WolvesConfig.LifeExpectancy = wolvesLifeExpectancy;
 
             return config;
         }
