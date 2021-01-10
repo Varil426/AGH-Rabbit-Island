@@ -3,10 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rabbit_Island"
+        xmlns:local="clr-namespace:Rabbit_Island" xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="GraphsWindow" Height="450" Width="800">
     <Grid>
-        <TextBlock>Implement me!</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="90*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0">TIME PLACEHOLDER Simulation Time: Days: XX, Hours: XX, Minutes: XX</TextBlock>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <oxy:PlotView Grid.Column="0" Model="{Binding RabbitsPlot}" />
+            <oxy:PlotView Grid.Column="1" Model="{Binding WolvesPlot}" />
+        </Grid>
     </Grid>
 </Window>

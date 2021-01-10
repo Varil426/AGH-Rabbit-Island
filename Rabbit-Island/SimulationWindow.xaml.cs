@@ -26,7 +26,7 @@ namespace Rabbit_Island
                 Height = world.WorldMap.Size.Item2,
                 Background = Brushes.Green
             };
-            Content.Children.Add(canvas);
+            Plane.Children.Add(canvas);
 
             var th = new Thread(DrawSimulation)
             {

@@ -28,6 +28,7 @@ namespace Rabbit_Island
             _entities = new List<Entity>();
             _worldMap = new Map((1000, 1000));
             WorldConfig = new Config();
+            StartTime = DateTime.Now;
         }
 
         public static World Instance
@@ -144,6 +145,8 @@ namespace Rabbit_Island
             get => _worldMap;
             set => _worldMap = value;
         }
+
+        public DateTime StartTime { get; }
 
         public delegate List<Creature> GenerateOffspringMethod(Creature mother, Creature father);
 
