@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:Rabbit_Island" xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="GraphsWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="10*" />
             <RowDefinition Height="90*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0">TIME PLACEHOLDER Simulation Time: Days: XX, Hours: XX, Minutes: XX</TextBlock>
+        <TextBlock Name="SimulationTimeText" Grid.Row="0">Simulation Time:</TextBlock>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

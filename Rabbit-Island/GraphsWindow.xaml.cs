@@ -24,6 +24,14 @@ namespace Rabbit_Island
     /// </summary>
     public partial class GraphsWindow : Window
     {
+        private string GenerateTimeString(double simulationTimeMinutes)
+        {
+            var minutes = (int)(simulationTimeMinutes % 60);
+            var hours = (int)(simulationTimeMinutes % (60 * 24) / 60);
+            var days = (int)(simulationTimeMinutes / (60 * 24));
+            return $"Simulation Time: Days: {days}, Hours: {hours}, Minutes: {minutes}";
+        }
+
         private void RunUpdateStatus()
         {
             var timeout = 1000 / 5;
@@ -32,6 +40,14 @@ namespace Rabbit_Island
             while (true)
             {
                 simulationTimeMinutes = (DateTime.Now - world.StartTime).TotalMinutes * world.WorldConfig.TimeRate;
+                try
+                {
+                    Dispatcher.Invoke(() => SimulationTimeText.Text = GenerateTimeString(simulationTimeMinutes));
+                }
+                catch (System.Threading.Tasks.TaskCanceledException)
+                {
+                }
+
                 _rabbitsData.Points.Add(new DataPoint(simulationTimeMinutes, world.GetAllEntities().OfType<Rabbit>().Where(rabbit => rabbit.IsAlive).Count()));
                 _wolvesData.Points.Add(new DataPoint(simulationTimeMinutes, world.GetAllEntities().OfType<Wolf>().Where(wolf => wolf.IsAlive).Count()));
                 RabbitsPlot.InvalidatePlot(true);
