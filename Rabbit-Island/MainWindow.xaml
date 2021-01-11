@@ -19,7 +19,7 @@
             <GroupBox.Header>Rabbits Config</GroupBox.Header>
             <StackPanel>
                 <Label>Initial Population</Label>
-                <TextBox Name="RabbitsInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="20" />
+                <TextBox Name="RabbitsInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="24" />
                 <Label>Pregnancy Duration (Days)</Label>
                 <TextBox Name="RabbitsPregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="1" />
                 <Label>Min Children</Label>
@@ -34,7 +34,7 @@
             <GroupBox.Header>Wolves Config</GroupBox.Header>
             <StackPanel>
                 <Label>Initial Population</Label>
-                <TextBox Name="WolvesInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="8" />
+                <TextBox Name="WolvesInitialPopulationInput" PreviewTextInput="NumericTextBox" Text="12" />
                 <Label>Pregnancy Duration (Days)</Label>
                 <TextBox Name="WolvesPregnancyDurationInput" PreviewTextInput="NumericTextBox" Text="2" />
                 <Label>Min Children</Label>

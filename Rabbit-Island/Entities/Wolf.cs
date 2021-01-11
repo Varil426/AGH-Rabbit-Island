@@ -123,6 +123,7 @@ namespace Rabbit_Island.Entities
                 case ActionType.Attack:
                     if (action.Target is Creature creature)
                     {
+                        creature.CreatureThread?.Interrupt();
                         creature.LoseHealth(Attack);
                     }
                     else
@@ -133,9 +134,9 @@ namespace Rabbit_Island.Entities
 
                 case ActionType.Eat:
                     Thread.Sleep(RaceValues.EatingTime);
-                    if (World.Instance.RemoveEntity(action.Target)) //TODO usuwanie wątku królika
+                    if (action.Target is Rabbit rabbit && !rabbit.IsAlive && World.Instance.RemoveEntity(action.Target))
                     {
-                        var energy = Energy + 50;
+                        var energy = Energy + 80;
                         if (energy > MaxEnergy)
                             energy = MaxEnergy;
                         Energy = energy;
@@ -185,7 +186,7 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
-            if (Energy < MaxEnergy / 2)
+            if (Energy < MaxEnergy / 3)
             {
                 if (States.Add(State.SearchingForFood))
                 {

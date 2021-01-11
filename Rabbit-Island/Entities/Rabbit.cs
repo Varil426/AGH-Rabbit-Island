@@ -181,9 +181,9 @@ namespace Rabbit_Island.Entities
         protected override Action Think(List<Entity> closeByEntities)
         {
             // TODO Improve this
-            if (closeByEntities.OfType<Wolf>().Any())
+            if (closeByEntities.OfType<Wolf>().Where(wolf => wolf.IsAlive).FirstOrDefault() is Wolf wolf)
             {
-                return new Action(ActionType.MoveAway, closeByEntities.OfType<Wolf>().First());
+                return new Action(ActionType.MoveAway, wolf);
             }
             if (Energy < MaxEnergy / 2)
             {

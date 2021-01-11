@@ -216,12 +216,18 @@ namespace Rabbit_Island.Entities
         {
             while (IsAlive)
             {
-                var closeByEntites = GetCloseByEntites();
-                UpdateStateSelf();
-                var action = Think(closeByEntites);
-                PerformAction(action);
-                _timeOfLastAction = DateTime.Now;
-                Thread.Sleep(20);
+                try
+                {
+                    var closeByEntites = GetCloseByEntites();
+                    UpdateStateSelf();
+                    var action = Think(closeByEntites);
+                    PerformAction(action);
+                    _timeOfLastAction = DateTime.Now;
+                    Thread.Sleep(20);
+                }
+                catch (ThreadInterruptedException)
+                {
+                }
             }
         }
 
