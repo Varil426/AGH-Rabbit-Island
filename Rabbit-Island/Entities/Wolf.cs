@@ -160,17 +160,18 @@ namespace Rabbit_Island.Entities
                         else
                         {
                             States.Add(State.WaitingToMate);
-                            InteractionEvent.WaitOne(RaceValues.WaitToMateTime);
-                            States.Remove(State.WaitingToMate);
-
-                            Thread.Sleep(RaceValues.MatingTime);
-
-                            if (Gender == GenderType.Female)
+                            if (InteractionEvent.WaitOne(RaceValues.WaitToMateTime))
                             {
-                                PregnantAt = DateTime.Now;
-                                PregnantWith = anotherWolf;
-                                States.Add(State.Pregnant);
+                                Thread.Sleep(RaceValues.MatingTime);
+
+                                if (Gender == GenderType.Female)
+                                {
+                                    PregnantAt = DateTime.Now;
+                                    PregnantWith = anotherWolf;
+                                    States.Add(State.Pregnant);
+                                }
                             }
+                            States.Remove(State.WaitingToMate);
                         }
                     }
                     break;
