@@ -28,7 +28,6 @@ namespace Rabbit_Island
             _entities = new List<Entity>();
             _worldMap = new Map((1000, 1000));
             WorldConfig = new Config();
-            StartTime = DateTime.Now;
         }
 
         public static World Instance
@@ -87,14 +86,8 @@ namespace Rabbit_Island
 
         public void StartSimulation()
         {
-            var directorThread = new Thread(Director.Instance.Run)
-            {
-                Name = "Director Thread",
-                IsBackground = true
-            };
-            directorThread.Start();
+            Director.Instance.Start();
 
-            // TODO Move it to fields
             var threads = new List<Thread>();
             foreach (ICreature creature in _entities.Where(x => x is ICreature))
             {
@@ -105,6 +98,8 @@ namespace Rabbit_Island
                 threads.Add(th);
                 creature.CreatureThread = th;
             }
+
+            SetStartTime();
             threads.ForEach(x => x.Start());
         }
 
@@ -140,13 +135,34 @@ namespace Rabbit_Island
             }
         }
 
+        public void Reset()
+        {
+            Director.Instance.Stop();
+            lock (_entities)
+            {
+                _entities.ForEach(x =>
+                {
+                    if (x is Creature creature)
+                    {
+                        creature.StopThread();
+                    }
+                });
+                _entities.Clear();
+            }
+        }
+
+        private void SetStartTime()
+        {
+            StartTime = DateTime.Now;
+        }
+
         public Map WorldMap
         {
             get => _worldMap;
             set => _worldMap = value;
         }
 
-        public DateTime StartTime { get; }
+        public DateTime StartTime { get; private set; }
 
         public delegate List<Creature> GenerateOffspringMethod(Creature mother, Creature father);
 

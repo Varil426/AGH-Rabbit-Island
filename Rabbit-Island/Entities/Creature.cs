@@ -28,6 +28,8 @@ namespace Rabbit_Island.Entities
 
         protected Thread? _creatureThread;
 
+        protected bool _threadRun;
+
         protected DateTime _movingSince;
 
         protected RelativePosition _moveDirection;
@@ -212,9 +214,15 @@ namespace Rabbit_Island.Entities
             public Entity Target { get; }
         }
 
+        public void StopThread()
+        {
+            _threadRun = false;
+        }
+
         public void Act()
         {
-            while (IsAlive)
+            _threadRun = true;
+            while (IsAlive && _threadRun)
             {
                 try
                 {

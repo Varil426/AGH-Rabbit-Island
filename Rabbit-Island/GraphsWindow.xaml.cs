@@ -24,6 +24,10 @@ namespace Rabbit_Island
     /// </summary>
     public partial class GraphsWindow : Window
     {
+        private Thread _thread;
+
+        private bool _threadRun;
+
         private string GenerateTimeString(double simulationTimeMinutes)
         {
             var minutes = (int)(simulationTimeMinutes % 60);
@@ -37,7 +41,8 @@ namespace Rabbit_Island
             var timeout = 1000 / 5;
             var world = World.Instance;
             double simulationTimeMinutes;
-            while (true)
+            _threadRun = true;
+            while (_threadRun)
             {
                 simulationTimeMinutes = (DateTime.Now - world.StartTime).TotalMinutes * world.WorldConfig.TimeRate;
                 try
@@ -103,11 +108,11 @@ namespace Rabbit_Island
 
             WolvesPlot.Series.Add(_wolvesData);
 
-            var th = new Thread(RunUpdateStatus)
+            _thread = new Thread(RunUpdateStatus)
             {
                 IsBackground = true
             };
-            th.Start();
+            _thread.Start();
         }
 
         private readonly LineSeries _rabbitsData;
@@ -117,5 +122,11 @@ namespace Rabbit_Island
         public PlotModel RabbitsPlot { get; private set; }
 
         public PlotModel WolvesPlot { get; private set; }
+
+        public void StopAndClose()
+        {
+            Close();
+            _threadRun = false;
+        }
     }
 }

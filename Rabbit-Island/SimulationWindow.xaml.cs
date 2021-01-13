@@ -13,6 +13,10 @@ namespace Rabbit_Island
     /// </summary>
     public partial class SimulationWindow : Window
     {
+        private Thread _thread;
+
+        private bool _threadRun;
+
         private World world = World.Instance;
 
         private Canvas canvas;
@@ -28,17 +32,18 @@ namespace Rabbit_Island
             };
             Plane.Children.Add(canvas);
 
-            var th = new Thread(DrawSimulation)
+            _thread = new Thread(DrawSimulation)
             {
                 IsBackground = true
             };
-            th.Start();
+            _thread.Start();
         }
 
-        public void DrawSimulation()
+        private void DrawSimulation()
         {
             var timeout = 1000 / 30;
-            while (true)
+            _threadRun = true;
+            while (_threadRun)
             {
                 try
                 {
@@ -57,6 +62,12 @@ namespace Rabbit_Island
                 {
                 }
             }
+        }
+
+        public void StopAndClose()
+        {
+            Close();
+            _threadRun = false;
         }
     }
 }

@@ -14,6 +14,10 @@ namespace Rabbit_Island
     {
         private World world = World.Instance;
 
+        private SimulationWindow? _simulationWindow;
+
+        private GraphsWindow? _graphsWindow;
+
         // TODO Add check for invalid values (or too big/small)
 
         public MainWindow()
@@ -117,7 +121,11 @@ namespace Rabbit_Island
 
         private void StartSimulation(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
+            ConfigGrid.ColumnDefinitions[0].IsEnabled = false;
+            ConfigGrid.ColumnDefinitions[1].IsEnabled = false;
+            StartStopButton.Content = "Stop";
+            StartStopButton.Click -= StartSimulation;
+            StartStopButton.Click += StopSimulation;
 
             world.WorldConfig = CreateConfigFromUserInput();
             world.WorldMap = new Map(world.WorldConfig.MapSize);
@@ -130,12 +138,26 @@ namespace Rabbit_Island
             Wolf.RaceValues.RefreshValues();
             CreateInitialCreatures();
 
-            var simulationWindow = new SimulationWindow();
-            var graphsWindow = new GraphsWindow();
-            graphsWindow.Show();
-            simulationWindow.Show();
+            _simulationWindow = new SimulationWindow();
+            _graphsWindow = new GraphsWindow();
+            _graphsWindow.Show();
+            _simulationWindow.Show();
 
             world.StartSimulation();
+        }
+
+        private void StopSimulation(object sender, RoutedEventArgs e)
+        {
+            ConfigGrid.ColumnDefinitions[0].IsEnabled = true;
+            ConfigGrid.ColumnDefinitions[1].IsEnabled = true;
+            StartStopButton.Content = "Run";
+            StartStopButton.Click -= StopSimulation;
+            StartStopButton.Click += StartSimulation;
+
+            _graphsWindow?.StopAndClose();
+            _simulationWindow?.StopAndClose();
+
+            world.Reset();
         }
     }
 }
