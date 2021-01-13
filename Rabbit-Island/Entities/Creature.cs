@@ -9,8 +9,10 @@ namespace Rabbit_Island.Entities
     {
         protected Creature(Vector2 position) : base(position)
         {
-            States = new HashSet<State>();
-            States.Add(State.Alive);
+            States = new HashSet<State>
+            {
+                State.Alive
+            };
 
             Array values = Enum.GetValues(typeof(GenderType));
             Gender = (GenderType)values.GetValue(StaticRandom.Generator.Next(values.Length))!;
@@ -148,9 +150,8 @@ namespace Rabbit_Island.Entities
 
         protected abstract void DeathFromOldAge();
 
-        public bool IsAlive => States.Contains(State.Alive) ?
-            States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true
-            : false;
+        public bool IsAlive => States.Contains(State.Alive)
+            && (States.Contains(State.Dead) ? throw new Exception("Creature should not be alive and dead at the same time") : true);
 
         protected virtual void UpdateStateSelf()
         {
@@ -217,6 +218,7 @@ namespace Rabbit_Island.Entities
         public void StopThread()
         {
             _threadRun = false;
+            _creatureThread?.Interrupt();
         }
 
         public void Act()

@@ -24,11 +24,11 @@ namespace Rabbit_Island
     /// </summary>
     public partial class GraphsWindow : Window
     {
-        private Thread _thread;
+        private readonly Thread _thread;
 
         private bool _threadRun;
 
-        private string GenerateTimeString(double simulationTimeMinutes)
+        private static string GenerateTimeString(double simulationTimeMinutes)
         {
             var minutes = (int)(simulationTimeMinutes % 60);
             var hours = (int)(simulationTimeMinutes % (60 * 24) / 60);
@@ -61,19 +61,23 @@ namespace Rabbit_Island
             }
         }
 
-        private (Axis, Axis) GenerateAxesFor(string name)
+        private static (Axis, Axis) GenerateAxesFor(string name)
         {
-            var xAxis = new LinearAxis();
-            xAxis.Position = AxisPosition.Bottom;
-            xAxis.Minimum = 0;
-            xAxis.Maximum = 5000;
-            xAxis.Title = "Time [minutes in simulation]";
+            var xAxis = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = 5000,
+                Title = "Time [minutes in simulation]"
+            };
 
-            var yAxis = new LinearAxis();
-            yAxis.Position = AxisPosition.Left;
-            yAxis.Minimum = 0;
-            yAxis.Maximum = 50; //World.Instance.WorldConfig.MaxCreatures;
-            yAxis.Title = name;
+            var yAxis = new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Minimum = 0,
+                Maximum = 50, //World.Instance.WorldConfig.MaxCreatures;
+                Title = name
+            };
 
             return (xAxis, yAxis);
         }

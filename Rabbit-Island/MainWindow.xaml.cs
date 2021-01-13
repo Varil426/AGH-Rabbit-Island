@@ -12,7 +12,7 @@ namespace Rabbit_Island
     /// </summary>
     public partial class MainWindow : Window
     {
-        private World world = World.Instance;
+        private readonly World world = World.Instance;
 
         private SimulationWindow? _simulationWindow;
 
@@ -67,17 +67,11 @@ namespace Rabbit_Island
             var mapSize = int.Parse(MapSizeInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
 
-            World.GenerateOffspringMethod generateOffspringMethod;
-
-            switch (OffspringGenerationMethodInput.SelectedIndex)
+            World.GenerateOffspringMethod generateOffspringMethod = OffspringGenerationMethodInput.SelectedIndex switch
             {
-                case 0:
-                    generateOffspringMethod = OffspringGeneration.BasicOffspringGeneration;
-                    break;
-
-                default:
-                    throw new ArgumentException("Invalid OffspringGenerationMethod selected");
-            }
+                0 => OffspringGeneration.BasicOffspringGeneration,
+                _ => throw new ArgumentException("Invalid OffspringGenerationMethod selected"),
+            };
 
             var config = new Config()
             {

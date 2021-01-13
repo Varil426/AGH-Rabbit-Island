@@ -30,13 +30,13 @@ namespace Rabbit_Island
             world = World.Instance;
         }
 
-        private Thread _directorThread;
+        private Thread? _directorThread;
         private bool _shouldRun;
 
         public void Stop()
         {
             _shouldRun = false;
-            _directorThread.Interrupt();
+            _directorThread?.Interrupt();
         }
 
         public void Start()
@@ -75,8 +75,7 @@ namespace Rabbit_Island
                             // Remove dead creatures
                             world.GetAllEntities().FindAll(entity => entity is Creature).ForEach(entity =>
                             {
-                                var creature = entity as Creature;
-                                if (creature != null && !creature.IsAlive && creature.DeathAt.AddMilliseconds(expirencyTime) <= DateTime.Now)
+                                if (entity is Creature creature && !creature.IsAlive && creature.DeathAt.AddMilliseconds(expirencyTime) <= DateTime.Now)
                                 {
                                     world.RemoveEntity(creature);
                                 }

@@ -13,13 +13,13 @@ namespace Rabbit_Island
     /// </summary>
     public partial class SimulationWindow : Window
     {
-        private Thread _thread;
+        private readonly Thread _thread;
 
         private bool _threadRun;
 
-        private World world = World.Instance;
+        private readonly World world = World.Instance;
 
-        private Canvas canvas;
+        private readonly Canvas canvas;
 
         public SimulationWindow()
         {
