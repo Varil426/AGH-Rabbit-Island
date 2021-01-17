@@ -28,12 +28,13 @@ namespace Rabbit_Island
         public static List<Creature> BasicOffspringGeneration(Creature mother, Creature father)
         {
             var offspring = new List<Creature>();
+            var nearbyLocation = GenerateNearbyLocation(mother);
+            var generation = Math.Max(mother.Generation, father.Generation) + 1;
             if (mother is Rabbit rabbitMother && father is Rabbit rabbitFather)
             {
                 var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.RabbitConfig.MinChildren, World.Instance.WorldConfig.RabbitConfig.MaxChildren);
                 for (int i = 0; i < offspringNumber; i++)
                 {
-                    var nearbyLocation = GenerateNearbyLocation(mother);
                     Rabbit chosenParent;
                     if (StaticRandom.Generator.Next(2) == 0)
                     {
@@ -43,7 +44,7 @@ namespace Rabbit_Island
                     {
                         chosenParent = rabbitFather;
                     }
-                    var child = new Rabbit(nearbyLocation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange, chosenParent.Fear);
+                    var child = new Rabbit(nearbyLocation, generation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange, chosenParent.Fear);
                     offspring.Add(child);
                 }
             }
@@ -52,7 +53,6 @@ namespace Rabbit_Island
                 var offspringNumber = StaticRandom.Generator.Next(World.Instance.WorldConfig.WolvesConfig.MinChildren, World.Instance.WorldConfig.WolvesConfig.MaxChildren);
                 for (int i = 0; i < offspringNumber; i++)
                 {
-                    var nearbyLocation = GenerateNearbyLocation(mother);
                     Wolf chosenParent;
                     if (StaticRandom.Generator.Next(2) == 0)
                     {
@@ -62,7 +62,7 @@ namespace Rabbit_Island
                     {
                         chosenParent = wolfFather;
                     }
-                    var child = new Wolf(nearbyLocation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange, chosenParent.Attack);
+                    var child = new Wolf(nearbyLocation, generation, chosenParent.MaxHealth, chosenParent.MaxEnergy, chosenParent.SightRange, chosenParent.MovementSpeed, chosenParent.InteractionRange, chosenParent.Attack);
                     offspring.Add(child);
                 }
             }

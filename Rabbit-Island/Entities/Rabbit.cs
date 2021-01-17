@@ -72,8 +72,8 @@ namespace Rabbit_Island.Entities
         }
 
         public Rabbit(
-            Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange,
-            int fear) : base(position)
+            Vector2 position, uint generation, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange,
+            int fear) : base(position, generation)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;

@@ -11,7 +11,16 @@
             <RowDefinition Height="10*" />
             <RowDefinition Height="90*" />
         </Grid.RowDefinitions>
-        <TextBlock Name="SimulationTimeText" Grid.Row="0">Simulation Time:</TextBlock>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Name="SimulationTimeText">Simulation Time:</TextBlock>
+            <TextBlock Grid.Column="1" Name="RabbitsGenerationText">Rabbits Generation:</TextBlock>
+            <TextBlock Grid.Column="2" Name="WolvesGenerationText">Wolves Generation:</TextBlock>
+        </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

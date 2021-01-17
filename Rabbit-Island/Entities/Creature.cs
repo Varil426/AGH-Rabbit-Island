@@ -7,6 +7,11 @@ namespace Rabbit_Island.Entities
 {
     internal abstract class Creature : Entity, ICreature
     {
+        protected Creature(Vector2 position, uint generation) : this(position)
+        {
+            Generation = generation;
+        }
+
         protected Creature(Vector2 position) : base(position)
         {
             States = new HashSet<State>
@@ -143,6 +148,8 @@ namespace Rabbit_Island.Entities
         public DateTime PregnantAt { get; protected set; }
 
         public Creature? PregnantWith { get; protected set; }
+
+        public uint Generation { get; }
 
         public bool CanMate => CreatedAt.AddMilliseconds((1000 * 60 * 60) / World.Instance.WorldConfig.TimeRate) <= DateTime.Now;
 

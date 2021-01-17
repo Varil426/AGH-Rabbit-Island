@@ -36,20 +36,40 @@ namespace Rabbit_Island
             return $"Simulation Time: Days: {days}, Hours: {hours}, Minutes: {minutes}";
         }
 
+        private enum CreatureType
+        {
+            Rabbits,
+            Wolves
+        }
+
+        private static string GenerateCreatureGenerationString(CreatureType creatureType, uint generation)
+        {
+            return $"{creatureType} Generation: {generation}";
+        }
+
         private void RunUpdateStatus()
         {
             var timeout = 1000 / 5;
             var world = World.Instance;
             double simulationTimeMinutes;
+            uint rabbitsGeneration;
+            uint wolvesGeneration;
             _threadRun = true;
             while (_threadRun)
             {
                 simulationTimeMinutes = (DateTime.Now - world.StartTime).TotalMinutes * world.WorldConfig.TimeRate;
+                rabbitsGeneration = (uint)world.GetAllEntities().OfType<Rabbit>().Max<Rabbit>(rabbit => rabbit.Generation);
+                wolvesGeneration = (uint)world.GetAllEntities().OfType<Wolf>().Max<Wolf>(wolf => wolf.Generation);
                 try
                 {
-                    Dispatcher.Invoke(() => SimulationTimeText.Text = GenerateTimeString(simulationTimeMinutes));
+                    Dispatcher.Invoke(() =>
+                    {
+                        SimulationTimeText.Text = GenerateTimeString(simulationTimeMinutes);
+                        RabbitsGenerationText.Text = GenerateCreatureGenerationString(CreatureType.Rabbits, rabbitsGeneration);
+                        WolvesGenerationText.Text = GenerateCreatureGenerationString(CreatureType.Wolves, wolvesGeneration);
+                    });
                 }
-                catch (System.Threading.Tasks.TaskCanceledException)
+                catch (TaskCanceledException)
                 {
                 }
 

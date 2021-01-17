@@ -70,7 +70,7 @@ namespace Rabbit_Island.Entities
             Attack = StaticRandom.Generator.Next(30, 120);
         }
 
-        public Wolf(Vector2 position, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange, int attack) : base(position)
+        public Wolf(Vector2 position, uint generation, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange, int attack) : base(position, generation)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
