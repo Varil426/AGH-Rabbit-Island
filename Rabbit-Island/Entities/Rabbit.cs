@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -278,6 +279,14 @@ namespace Rabbit_Island.Entities
             if (World.Instance.WorldConfig.DeathFromOldAge && CreatedAt.AddMilliseconds(RaceValues.LifeExpectancy) <= DateTime.Now)
             {
                 Die();
+            }
+        }
+
+        public class RabbitMap : CreatureMap<Rabbit>
+        {
+            public RabbitMap()
+            {
+                Map(rabbit => rabbit.Fear).Name("fear");
             }
         }
     }

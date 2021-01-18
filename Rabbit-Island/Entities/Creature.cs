@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
@@ -253,6 +255,22 @@ namespace Rabbit_Island.Entities
             lock (this)
             {
                 Health -= damage;
+            }
+        }
+
+        public class CreatureMap<T> : ClassMap<T> where T : Creature
+        {
+            public CreatureMap()
+            {
+                Map(creature => creature.CreatedAt).Name("createdAt");
+                Map(creature => creature.DeathAt).Name("deathAt");
+                Map(creature => creature.Generation).Name("generation");
+                Map(creature => creature.MaxHealth).Name("maxHealth");
+                Map(creature => creature.MaxEnergy).Name("maxEnergy");
+                Map(creature => creature.MovementSpeed).Name("movementSpeed");
+                Map(creature => creature.SightRange).Name("sightRange");
+                Map(creature => creature.InteractionRange).Name("interactionRange");
+                Map(creature => creature.Gender).Name("gender");
             }
         }
     }

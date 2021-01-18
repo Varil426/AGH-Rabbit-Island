@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Threading;
+using CsvHelper;
 
 namespace Rabbit_Island.Entities
 {
@@ -289,6 +290,14 @@ namespace Rabbit_Island.Entities
             if (World.Instance.WorldConfig.DeathFromOldAge && CreatedAt.AddMilliseconds(RaceValues.LifeExpectancy) <= DateTime.Now)
             {
                 Die();
+            }
+        }
+
+        public class WolfMap : CreatureMap<Wolf>
+        {
+            public WolfMap()
+            {
+                Map(wolf => wolf.Attack).Name("attack");
             }
         }
     }

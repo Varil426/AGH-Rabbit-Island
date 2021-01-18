@@ -13,9 +13,11 @@ namespace Rabbit_Island
         private static Vector2 GenerateNearbyLocation(Creature creature)
         {
             var random = StaticRandom.Generator;
-            var location = new Vector2();
-            location.X = random.Next((int)creature.Position.X - 5, (int)creature.Position.X + 5);
-            location.Y = random.Next((int)creature.Position.Y - 5, (int)creature.Position.Y + 5);
+            var location = new Vector2
+            {
+                X = random.Next((int)creature.Position.X - 5, (int)creature.Position.X + 5),
+                Y = random.Next((int)creature.Position.Y - 5, (int)creature.Position.Y + 5)
+            };
             return location;
         }
 

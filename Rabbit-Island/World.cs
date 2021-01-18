@@ -11,6 +11,8 @@ namespace Rabbit_Island
     {
         private static readonly World _instance = new World();
 
+        private readonly List<Creature> _legacyCreatures;
+
         private readonly List<Entity> _entities;
 
         private Map _worldMap;
@@ -26,6 +28,7 @@ namespace Rabbit_Island
         private World()
         {
             _entities = new List<Entity>();
+            _legacyCreatures = new List<Creature>();
             _worldMap = new Map((1000, 1000));
             WorldConfig = new Config();
         }
@@ -65,9 +68,23 @@ namespace Rabbit_Island
                 if (_entities.OfType<Creature>().Count() < WorldConfig.MaxCreatures)
                 {
                     AddEntity(creature);
+                    _legacyCreatures.Add(creature);
                     creature.CreatureThread = th;
                     th.Start();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Adds creature to the world.
+        /// </summary>
+        /// <param name="creature">Creature to be added to the world.</param>
+        public void AddCreatureWithoutStartingAThread(Creature creature)
+        {
+            lock (_entities)
+            {
+                AddEntity(creature);
+                _legacyCreatures.Add(creature);
             }
         }
 
@@ -123,6 +140,18 @@ namespace Rabbit_Island
             }
         }
 
+        /// <summary>
+        /// Returns all creatures that have ever exsisted in simulation.
+        /// </summary>
+        /// <returns>List of creatures that have ever exsisted in simulation.</returns>
+        public List<Creature> GetLegacyCreatures()
+        {
+            lock (_entities)
+            {
+                return new List<Creature>(_legacyCreatures);
+            }
+        }
+
         public List<Entity> GetCloseByEntities(Creature creature)
         {
             lock (_entities)
@@ -148,6 +177,7 @@ namespace Rabbit_Island
                     }
                 });
                 _entities.Clear();
+                _legacyCreatures.Clear();
             }
         }
 
