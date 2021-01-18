@@ -71,6 +71,7 @@ namespace Rabbit_Island.Entities
             {
                 finalDirection += direction;
             }
+            finalDirection = Vector2.Normalize(finalDirection);
 
             var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
             var newPosition = Position + finalDirection * (float)distance;
