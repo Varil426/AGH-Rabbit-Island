@@ -202,7 +202,7 @@ namespace Rabbit_Island.Entities
         {
             var nearbyWolves = closeByEntities.OfType<Wolf>().Where(wolf => wolf.IsAlive).ToList();
             var danger = CalculateDanger(nearbyWolves);
-            if (danger >= 10 / Fear)
+            if (danger >= 1 / Fear)
             {
                 return new Action(ActionType.MoveAway, new EntitiesGroup(new List<Entity>(nearbyWolves)));
             }

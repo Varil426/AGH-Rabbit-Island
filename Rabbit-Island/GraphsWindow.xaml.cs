@@ -57,6 +57,7 @@ namespace Rabbit_Island
             _threadRun = true;
             while (_threadRun)
             {
+                Thread.Sleep(timeout);
                 simulationTimeMinutes = (DateTime.Now - world.StartTime).TotalMinutes * world.WorldConfig.TimeRate;
                 rabbitsGeneration = (uint)world.GetAllEntities().OfType<Rabbit>().Max<Rabbit>(rabbit => rabbit.Generation);
                 wolvesGeneration = (uint)world.GetAllEntities().OfType<Wolf>().Max<Wolf>(wolf => wolf.Generation);
@@ -77,7 +78,6 @@ namespace Rabbit_Island
                 _wolvesData.Points.Add(new DataPoint(simulationTimeMinutes, world.GetAllEntities().OfType<Wolf>().Where(wolf => wolf.IsAlive).Count()));
                 RabbitsPlot.InvalidatePlot(true);
                 WolvesPlot.InvalidatePlot(true);
-                Thread.Sleep(timeout);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Rabbit_Island
         public GraphsWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
 
             _rabbitsData = new LineSeries();
             _wolvesData = new LineSeries();
