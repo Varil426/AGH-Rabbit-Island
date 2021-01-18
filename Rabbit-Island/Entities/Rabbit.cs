@@ -69,7 +69,7 @@ namespace Rabbit_Island.Entities
             SightRange = StaticRandom.Generator.Next(25, 50);
             MovementSpeed = StaticRandom.Generator.Next(5, 20);
             InteractionRange = StaticRandom.Generator.Next(2, 6);
-            Fear = StaticRandom.Generator.Next(10);
+            Fear = StaticRandom.Generator.Next(1, 10);
         }
 
         public Rabbit(
@@ -125,7 +125,14 @@ namespace Rabbit_Island.Entities
                     break;
 
                 case ActionType.MoveAway:
-                    MoveAway(action.Target);
+                    if (action.Target is EntitiesGroup entitiesGroup)
+                    {
+                        MoveAway(entitiesGroup);
+                    }
+                    else
+                    {
+                        MoveAway(action.Target);
+                    }
                     break;
 
                 case ActionType.Eat:
@@ -180,12 +187,24 @@ namespace Rabbit_Island.Entities
             }
         }
 
+        private float CalculateDanger(List<Wolf> wolves)
+        {
+            float accumulatedDanger = 0;
+            foreach (var wolf in wolves)
+            {
+                var distance = Vector2.Distance(Position, wolf.Position);
+                accumulatedDanger += 1 / distance;
+            }
+            return accumulatedDanger;
+        }
+
         protected override Action Think(List<Entity> closeByEntities)
         {
-            // TODO Improve this
-            if (closeByEntities.OfType<Wolf>().Where(wolf => wolf.IsAlive).FirstOrDefault() is Wolf wolf)
+            var nearbyWolves = closeByEntities.OfType<Wolf>().Where(wolf => wolf.IsAlive).ToList();
+            var danger = CalculateDanger(nearbyWolves);
+            if (danger >= 10 / Fear)
             {
-                return new Action(ActionType.MoveAway, wolf);
+                return new Action(ActionType.MoveAway, new EntitiesGroup(new List<Entity>(nearbyWolves)));
             }
             if (Energy < MaxEnergy / 2)
             {

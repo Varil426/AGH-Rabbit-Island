@@ -55,6 +55,34 @@ namespace Rabbit_Island.Entities
 
         protected AutoResetEvent InteractionEvent { get; }
 
+        protected void MoveAway(EntitiesGroup entitiesGroup)
+        {
+            var now = DateTime.Now;
+            var timeDifference = now - _timeOfLastAction;
+
+            var directions = new List<Vector2>();
+            foreach (var entity in entitiesGroup.Entities)
+            {
+                directions.Add(Vector2.Normalize(Position - entity.Position));
+            }
+
+            Vector2 finalDirection = new Vector2();
+            foreach (var direction in directions)
+            {
+                finalDirection += direction;
+            }
+
+            var distance = MovementSpeed * timeDifference.TotalMinutes * World.Instance.WorldConfig.TimeRate;
+            var newPosition = Position + finalDirection * (float)distance;
+            if (newPosition.X <= World.Instance.WorldMap.Size.Item1
+                && newPosition.X >= 0
+                && newPosition.Y <= World.Instance.WorldMap.Size.Item2
+                && newPosition.Y >= 0)
+            {
+                Position = newPosition;
+            }
+        }
+
         protected void MoveAway(Entity entityToMoveAwayFrom)
         {
             var now = DateTime.Now;
