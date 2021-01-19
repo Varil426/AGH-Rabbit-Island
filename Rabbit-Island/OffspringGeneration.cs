@@ -77,9 +77,9 @@ namespace Rabbit_Island
 
         private static double Mutate(double value)
         {
-            if (StaticRandom.Generator.Next(100) >= 90)
+            if (StaticRandom.Generator.Next(100) >= 100 - 100 * World.Instance.WorldConfig.MutationChance)
             {
-                value = StaticRandom.Generator.Next((int)(value - value / 10), (int)(value + value / 10));
+                value = StaticRandom.Generator.Next((int)(value - value * World.Instance.WorldConfig.MutationImpact), (int)(value + value * World.Instance.WorldConfig.MutationImpact));
             }
             return value;
         }

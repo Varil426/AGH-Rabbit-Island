@@ -55,6 +55,36 @@ namespace Rabbit_Island
 
         public int MaxCreatures { get; set; }
 
+        private double _mutationChance;
+
+        public double MutationChance
+        {
+            get => _mutationChance;
+            set
+            {
+                if (value < 0 || value > 1)
+                {
+                    throw new ArgumentException("Value must be between 0 and 1");
+                }
+                _mutationChance = value;
+            }
+        }
+
+        private double _mutationImpact;
+
+        public double MutationImpact
+        {
+            get => _mutationImpact;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Value must be greater than or equal to 0");
+                }
+                _mutationImpact = value;
+            }
+        }
+
         public int FruitsPerDay { get; set; }
 
         public bool FoodExpires { get; set; }

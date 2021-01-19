@@ -71,6 +71,8 @@ namespace Rabbit_Island
             var mapSize = int.Parse(MapSizeInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
             var exportResultsToCSV = (bool)ExportResultsToCSVInput.IsChecked!;
+            var mutationChance = double.Parse(MutationChanceInput.Text);
+            var mutationImpact = double.Parse(MutationImpactInput.Text);
 
             World.GenerateOffspringMethod generateOffspringMethod = OffspringGenerationMethodInput.SelectedIndex switch
             {
@@ -88,7 +90,9 @@ namespace Rabbit_Island
                 DrawRanges = drawRanges,
                 MapSize = (mapSize, mapSize),
                 SelectedOffspringGenerationMethod = generateOffspringMethod,
-                ExportResultsToCSV = exportResultsToCSV
+                ExportResultsToCSV = exportResultsToCSV,
+                MutationChance = mutationChance,
+                MutationImpact = mutationImpact
             };
 
             config.RabbitConfig.InitialPopulation = rabbitsInitialPopulation;
