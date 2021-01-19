@@ -11,13 +11,13 @@ namespace Rabbit_Island.Entities
 
         public Thread? CreatureThread { get; set; }
 
-        public float Health { get; }
+        public double Health { get; }
 
-        public float Energy { get; }
+        public double Energy { get; }
 
-        public float SightRange { get; }
+        public double SightRange { get; }
 
-        public float InteractionRange { get; }
+        public double InteractionRange { get; }
 
         public double MovementSpeed { get; }
 

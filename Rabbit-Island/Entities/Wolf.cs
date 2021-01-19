@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Threading;
 using CsvHelper;
+using System.Linq;
 
 namespace Rabbit_Island.Entities
 {
@@ -57,6 +58,11 @@ namespace Rabbit_Island.Entities
             /// Represents how long should wolf live until death from natural causes. (Scaled to simulation time rate)
             /// </summary>
             public static int LifeExpectancy { get; private set; }
+
+            /// <summary>
+            /// Represents value used in generating creatures (so they will not be too powerful).
+            /// </summary>
+            public static int InitialPopulationCredits { get; } = 100;
         }
 
         public Wolf(Vector2 position) : base(position)
@@ -69,9 +75,41 @@ namespace Rabbit_Island.Entities
             MovementSpeed = StaticRandom.Generator.Next(5, 20);
             InteractionRange = StaticRandom.Generator.Next(4, 8);
             Attack = StaticRandom.Generator.Next(30, 120);
+
+            int creditsLeft = RaceValues.InitialPopulationCredits;
+
+            var traits = new Dictionary<string, int>
+            {
+                { "MaxHealth", 20 },
+                { "MaxEnergy", 20 },
+                { "SightRange", 20 },
+                { "MovementSpeed", 20 },
+                { "InteractionRange", 20 }
+            };
+
+            while (creditsLeft > 10)
+            {
+                var selectedKey = RandomKeyFormDictionary(traits).First();
+                var oldValue = traits[selectedKey];
+                var newValue = oldValue + StaticRandom.Generator.Next(10);
+                var additionCost = AdditionalCost(traits[selectedKey], newValue);
+                creditsLeft -= additionCost;
+                traits[selectedKey] = newValue;
+            }
+
+            traits.Add("Attack", StaticRandom.Generator.Next(1, creditsLeft));
+
+            MaxHealth = traits["MaxHealth"];
+            Health = MaxHealth;
+            MaxEnergy = traits["MaxEnergy"];
+            Energy = MaxEnergy;
+            SightRange = traits["SightRange"] / 1.5;
+            MovementSpeed = traits["MovementSpeed"] / 4;
+            InteractionRange = traits["InteractionRange"] / 10;
+            Attack = traits["Attack"] * 30;
         }
 
-        public Wolf(Vector2 position, uint generation, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange, int attack) : base(position, generation)
+        public Wolf(Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange, int attack) : base(position, generation)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;

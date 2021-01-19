@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 
@@ -153,17 +154,17 @@ namespace Rabbit_Island.Entities
         /// <summary>
         /// Energy drain per minute.
         /// </summary>
-        protected readonly float _energyDrain;
+        protected readonly double _energyDrain;
 
-        public float MaxHealth { get; protected set; }
-        public float Health { get; protected set; }
+        public double MaxHealth { get; protected set; }
+        public double Health { get; protected set; }
 
-        public float MaxEnergy { get; protected set; }
-        public float Energy { get; protected set; }
+        public double MaxEnergy { get; protected set; }
+        public double Energy { get; protected set; }
 
-        public float SightRange { get; protected set; }
+        public double SightRange { get; protected set; }
 
-        public float InteractionRange { get; protected set; }
+        public double InteractionRange { get; protected set; }
 
         /// <summary>
         /// Creature movement speed in units per real time minute
@@ -228,6 +229,24 @@ namespace Rabbit_Island.Entities
         private List<Entity> GetCloseByEntites()
         {
             return World.Instance.GetCloseByEntities(this);
+        }
+
+        protected int AdditionalCost(int previousValue, int newValue)
+        {
+            var previousConst = previousValue / 2;
+            var newCost = newValue / 2;
+
+            return (int)(newCost - previousConst);
+        }
+
+        protected IEnumerable<TKey> RandomKeyFormDictionary<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
+        {
+            List<TKey> keys = Enumerable.ToList(dictionary.Keys);
+            int size = dictionary.Count;
+            while (true)
+            {
+                yield return keys[StaticRandom.Generator.Next(size)];
+            }
         }
 
         protected enum ActionType

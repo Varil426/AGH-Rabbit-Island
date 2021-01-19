@@ -58,22 +58,50 @@ namespace Rabbit_Island.Entities
             /// Represents how long should rabbit live until death from natural causes. (Scaled to simulation time rate)
             /// </summary>
             public static int LifeExpectancy { get; private set; }
+
+            /// <summary>
+            /// Represents value used in generating creatures (so they will not be too powerful).
+            /// </summary>
+            public static int InitialPopulationCredits { get; } = 100;
         }
 
         public Rabbit(Vector2 position) : base(position)
         {
-            MaxHealth = StaticRandom.Generator.Next(90, 110);
+            int creditsLeft = RaceValues.InitialPopulationCredits;
+
+            var traits = new Dictionary<string, int>
+            {
+                { "MaxHealth", 20 },
+                { "MaxEnergy", 20 },
+                { "SightRange", 20 },
+                { "MovementSpeed", 20 },
+                { "InteractionRange", 20 }
+            };
+
+            while (creditsLeft > 10)
+            {
+                var selectedKey = RandomKeyFormDictionary(traits).First();
+                var oldValue = traits[selectedKey];
+                var newValue = oldValue + StaticRandom.Generator.Next(10);
+                var additionCost = AdditionalCost(traits[selectedKey], newValue);
+                creditsLeft -= additionCost;
+                traits[selectedKey] = newValue;
+            }
+
+            traits.Add("Fear", StaticRandom.Generator.Next(1, creditsLeft));
+
+            MaxHealth = traits["MaxHealth"];
             Health = MaxHealth;
-            MaxEnergy = StaticRandom.Generator.Next(90, 110);
+            MaxEnergy = traits["MaxEnergy"];
             Energy = MaxEnergy;
-            SightRange = StaticRandom.Generator.Next(25, 50);
-            MovementSpeed = StaticRandom.Generator.Next(5, 20);
-            InteractionRange = StaticRandom.Generator.Next(2, 6);
-            Fear = StaticRandom.Generator.Next(1, 10);
+            SightRange = traits["SightRange"] / 2;
+            MovementSpeed = traits["MovementSpeed"] / 4;
+            InteractionRange = traits["InteractionRange"] / 10;
+            Fear = traits["Fear"];
         }
 
         public Rabbit(
-            Vector2 position, uint generation, float maxHealth, float maxEnergy, float sightRange, double movementSpeed, float interactionRange,
+            Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange,
             int fear) : base(position, generation)
         {
             MaxHealth = maxHealth;
@@ -202,7 +230,7 @@ namespace Rabbit_Island.Entities
         {
             var nearbyWolves = closeByEntities.OfType<Wolf>().Where(wolf => wolf.IsAlive).ToList();
             var danger = CalculateDanger(nearbyWolves);
-            if (danger >= 1 / Fear)
+            if (danger >= 1f / Fear)
             {
                 return new Action(ActionType.MoveAway, new EntitiesGroup(new List<Entity>(nearbyWolves)));
             }
