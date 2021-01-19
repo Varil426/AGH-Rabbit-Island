@@ -74,7 +74,8 @@ namespace Rabbit_Island
 
             World.GenerateOffspringMethod generateOffspringMethod = OffspringGenerationMethodInput.SelectedIndex switch
             {
-                0 => OffspringGeneration.BasicOffspringGeneration,
+                0 => OffspringGeneration.OffspringGenerationWithMutations,
+                1 => OffspringGeneration.BasicOffspringGeneration,
                 _ => throw new ArgumentException("Invalid OffspringGenerationMethod selected"),
             };
 

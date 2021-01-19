@@ -60,7 +60,8 @@
                 <TextBox Name="MapSizeInput" PreviewTextInput="NumericTextBox" Text="800" />
                 <Label>Offspring Generation Method</Label>
                 <ComboBox Name="OffspringGenerationMethodInput">
-                    <ComboBoxItem IsSelected="True">Basic Offspring Generation Method</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">Offspring Generation With Mutations</ComboBoxItem>
+                    <ComboBoxItem>Basic Offspring Generation Method</ComboBoxItem>
                 </ComboBox>
                 <Label>Food Expires</Label>
                 <CheckBox Name="FoodExpiresInput" IsChecked="True" />
