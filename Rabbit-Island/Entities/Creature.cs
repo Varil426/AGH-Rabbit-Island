@@ -27,7 +27,7 @@ namespace Rabbit_Island.Entities
 
             InteractionEvent = new AutoResetEvent(false);
 
-            _energyDrain = 0.1f;
+            _energyDrain = 0.05f;
 
             _timeOfLastAction = DateTime.Now;
             _movingSince = DateTime.Now;

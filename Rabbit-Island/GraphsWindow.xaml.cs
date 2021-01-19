@@ -52,15 +52,26 @@ namespace Rabbit_Island
             var timeout = 1000 / 5;
             var world = World.Instance;
             double simulationTimeMinutes;
-            uint rabbitsGeneration;
-            uint wolvesGeneration;
+            uint rabbitsGeneration = 0;
+            uint wolvesGeneration = 0;
             _threadRun = true;
             while (_threadRun)
             {
                 Thread.Sleep(timeout);
                 simulationTimeMinutes = (DateTime.Now - world.StartTime).TotalMinutes * world.WorldConfig.TimeRate;
-                rabbitsGeneration = (uint)world.GetAllEntities().OfType<Rabbit>().Max<Rabbit>(rabbit => rabbit.Generation);
-                wolvesGeneration = (uint)world.GetAllEntities().OfType<Wolf>().Max<Wolf>(wolf => wolf.Generation);
+
+                var rabbits = world.GetAllEntities().OfType<Rabbit>();
+                if (rabbits.Any())
+                {
+                    rabbitsGeneration = (uint)rabbits.Max<Rabbit>(rabbit => rabbit.Generation);
+                }
+
+                var wolves = world.GetAllEntities().OfType<Wolf>();
+                if (wolves.Any())
+                {
+                    wolvesGeneration = (uint)wolves.Max<Wolf>(wolf => wolf.Generation);
+                }
+
                 try
                 {
                     Dispatcher.Invoke(() =>
