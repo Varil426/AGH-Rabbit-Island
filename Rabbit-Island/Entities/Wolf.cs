@@ -109,7 +109,7 @@ namespace Rabbit_Island.Entities
             Attack = traits["Attack"] * 30;
         }
 
-        public Wolf(Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange, int attack) : base(position, generation)
+        public Wolf(Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange, double attack) : base(position, generation)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
@@ -121,7 +121,7 @@ namespace Rabbit_Island.Entities
             Attack = attack;
         }
 
-        public int Attack { get; }
+        public double Attack { get; }
 
         public override void DrawSelf(Canvas canvas)
         {

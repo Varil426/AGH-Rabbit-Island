@@ -77,9 +77,9 @@ namespace Rabbit_Island
 
         private static double Mutate(double value)
         {
-            if (StaticRandom.Generator.Next(100) >= 100 - 100 * World.Instance.WorldConfig.MutationChance)
+            if (StaticRandom.Generator.Next(100) <= 100 * World.Instance.WorldConfig.MutationChance)
             {
-                value = StaticRandom.Generator.Next((int)(value - value * World.Instance.WorldConfig.MutationImpact), (int)(value + value * World.Instance.WorldConfig.MutationImpact));
+                value += value * ((StaticRandom.Generator.NextDouble() * 2 - 1) * World.Instance.WorldConfig.MutationImpact);
             }
             return value;
         }
@@ -141,7 +141,7 @@ namespace Rabbit_Island
                         traits["Fear"] = rabbitFather.Fear;
                     traits["Fear"] = Mutate(traits["Fear"]);
 
-                    var child = new Rabbit(nearbyLocation, generation, traits["MaxHealth"], traits["MaxEnergy"], traits["SightRange"], traits["MovementSpeed"], traits["InteractionRange"], (int)traits["Fear"]);
+                    var child = new Rabbit(nearbyLocation, generation, traits["MaxHealth"], traits["MaxEnergy"], traits["SightRange"], traits["MovementSpeed"], traits["InteractionRange"], traits["Fear"]);
                     offspring.Add(child);
                 }
             }
@@ -187,7 +187,7 @@ namespace Rabbit_Island
                         traits["Attack"] = wolfFather.Attack;
                     traits["Attack"] = Mutate(traits["Attack"]);
 
-                    var child = new Wolf(nearbyLocation, generation, traits["MaxHealth"], traits["MaxEnergy"], traits["SightRange"], traits["MovementSpeed"], traits["InteractionRange"], (int)traits["Attack"]);
+                    var child = new Wolf(nearbyLocation, generation, traits["MaxHealth"], traits["MaxEnergy"], traits["SightRange"], traits["MovementSpeed"], traits["InteractionRange"], traits["Attack"]);
                     offspring.Add(child);
                 }
             }

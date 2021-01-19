@@ -231,7 +231,7 @@ namespace Rabbit_Island.Entities
             return World.Instance.GetCloseByEntities(this);
         }
 
-        protected int AdditionalCost(int previousValue, int newValue)
+        protected int AdditionalCost(double previousValue, double newValue)
         {
             var previousConst = previousValue / 2;
             var newCost = newValue / 2;
@@ -298,7 +298,7 @@ namespace Rabbit_Island.Entities
             }
         }
 
-        public void LoseHealth(float damage)
+        public void LoseHealth(double damage)
         {
             lock (this)
             {

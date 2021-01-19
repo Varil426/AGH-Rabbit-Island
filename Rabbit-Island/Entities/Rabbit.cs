@@ -69,7 +69,7 @@ namespace Rabbit_Island.Entities
         {
             int creditsLeft = RaceValues.InitialPopulationCredits;
 
-            var traits = new Dictionary<string, int>
+            var traits = new Dictionary<string, double>
             {
                 { "MaxHealth", 20 },
                 { "MaxEnergy", 20 },
@@ -102,7 +102,7 @@ namespace Rabbit_Island.Entities
 
         public Rabbit(
             Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange,
-            int fear) : base(position, generation)
+            double fear) : base(position, generation)
         {
             MaxHealth = maxHealth;
             Health = MaxHealth;
@@ -114,7 +114,7 @@ namespace Rabbit_Island.Entities
             Fear = fear;
         }
 
-        public int Fear { get; }
+        public double Fear { get; }
 
         public override void DrawSelf(Canvas canvas)
         {
