@@ -103,10 +103,10 @@ namespace Rabbit_Island.Entities
             Health = MaxHealth;
             MaxEnergy = traits["MaxEnergy"];
             Energy = MaxEnergy;
-            SightRange = traits["SightRange"] / 1.5;
-            MovementSpeed = traits["MovementSpeed"] / 4;
-            InteractionRange = traits["InteractionRange"] / 10;
-            Attack = traits["Attack"] * 30;
+            SightRange = traits["SightRange"] * 0.55;
+            MovementSpeed = traits["MovementSpeed"] * 0.28;
+            InteractionRange = traits["InteractionRange"] * 0.18;
+            Attack = traits["Attack"] * 10;
         }
 
         public Wolf(Vector2 position, uint generation, double maxHealth, double maxEnergy, double sightRange, double movementSpeed, double interactionRange, double attack) : base(position, generation)
