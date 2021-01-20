@@ -62,7 +62,7 @@ namespace Rabbit_Island.Entities
             /// <summary>
             /// Represents value used in generating creatures (so they will not be too powerful).
             /// </summary>
-            public static int InitialPopulationCredits { get; } = 100;
+            public static int InitialPopulationCredits { get; } = 115;
         }
 
         public Rabbit(Vector2 position) : base(position)
@@ -90,14 +90,14 @@ namespace Rabbit_Island.Entities
 
             traits.Add("Fear", StaticRandom.Generator.Next(1, creditsLeft));
 
-            MaxHealth = traits["MaxHealth"];
+            MaxHealth = traits["MaxHealth"] * 1.1;
             Health = MaxHealth;
-            MaxEnergy = traits["MaxEnergy"];
+            MaxEnergy = traits["MaxEnergy"] * 1.1;
             Energy = MaxEnergy;
-            SightRange = traits["SightRange"] / 2;
-            MovementSpeed = traits["MovementSpeed"] / 4;
-            InteractionRange = traits["InteractionRange"] / 10;
-            Fear = traits["Fear"];
+            SightRange = traits["SightRange"] * 0.5;
+            MovementSpeed = traits["MovementSpeed"] * 0.25;
+            InteractionRange = traits["InteractionRange"] * 0.18;
+            Fear = traits["Fear"] * 8;
         }
 
         public Rabbit(

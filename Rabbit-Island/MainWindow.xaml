@@ -53,7 +53,7 @@
                 <Label>Death From Old Age</Label>
                 <CheckBox Name="DeathFromOldAgeInput" IsChecked="False" />
                 <Label>Max Creatures</Label>
-                <TextBox Name="MaxCreaturesInput" PreviewTextInput="NumericTextBox" Text="500" />
+                <TextBox Name="MaxCreaturesInput" PreviewTextInput="NumericTextBox" Text="200" />
                 <Label>Fruits Per Day</Label>
                 <TextBox Name="FruitsPerDayInput" PreviewTextInput="NumericTextBox" Text="60" />
                 <Label>Map Size</Label>
