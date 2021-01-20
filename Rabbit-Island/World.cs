@@ -103,21 +103,25 @@ namespace Rabbit_Island
 
         public void StartSimulation()
         {
-            Director.Instance.Start();
-
-            var threads = new List<Thread>();
-            foreach (ICreature creature in _entities.Where(x => x is ICreature))
+            lock (_entities)
             {
-                var th = new Thread(creature.Act)
+                Director.Instance.Start();
+
+                var threads = new List<Thread>();
+                foreach (ICreature creature in _entities.Where(x => x is ICreature))
                 {
-                    IsBackground = true
-                };
-                threads.Add(th);
-                creature.CreatureThread = th;
+                    var th = new Thread(creature.Act)
+                    {
+                        IsBackground = true
+                    };
+                    threads.Add(th);
+                    creature.CreatureThread = th;
+                }
+
+                SetStartTime();
+                threads.ForEach(x => x.Start());
             }
 
-            SetStartTime();
-            threads.ForEach(x => x.Start());
         }
 
         public List<Entity> GetAllEntities()
