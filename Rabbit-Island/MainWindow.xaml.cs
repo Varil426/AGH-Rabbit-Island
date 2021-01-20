@@ -35,6 +35,12 @@ namespace Rabbit_Island
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void FloatTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[0 - 9]+([.][0 - 9] *) ?|[.][0 - 9] +");
+              e.Handled = regex.IsMatch(e.Text);
+        }
+
         private void TimeRateChange(object sender, TextChangedEventArgs args)
         {
             Regex regex = new Regex("^0+$");
@@ -71,8 +77,8 @@ namespace Rabbit_Island
             var mapSize = int.Parse(MapSizeInput.Text);
             var drawRanges = (bool)DrawRangesInput.IsChecked!;
             var exportResultsToCSV = (bool)ExportResultsToCSVInput.IsChecked!;
-            var mutationChance = double.Parse(MutationChanceInput.Text);
-            var mutationImpact = double.Parse(MutationImpactInput.Text);
+            var mutationChance = double.Parse(MutationChanceInput.Text, CultureInfo.InvariantCulture);
+            var mutationImpact = double.Parse(MutationImpactInput.Text, CultureInfo.InvariantCulture);
 
             World.GenerateOffspringMethod generateOffspringMethod = OffspringGenerationMethodInput.SelectedIndex switch
             {

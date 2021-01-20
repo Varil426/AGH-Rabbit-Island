@@ -64,9 +64,9 @@
                     <ComboBoxItem>Basic Offspring Generation Method</ComboBoxItem>
                 </ComboBox>
                 <Label>Mutation Chance % [0, 1]</Label>
-                <TextBox Name="MutationChanceInput" PreviewTextInput="NumericTextBox" Text="0.1" />
+                <TextBox Name="MutationChanceInput" PreviewTextInput="FloatTextBox" Text="0.1" />
                 <Label>Mutation Impact %</Label>
-                <TextBox Name="MutationImpactInput" PreviewTextInput="NumericTextBox" Text="0.1" />
+                <TextBox Name="MutationImpactInput" PreviewTextInput="FloatTextBox" Text="0.1" />
                 <Label>Food Expires</Label>
                 <CheckBox Name="FoodExpiresInput" IsChecked="True" />
                 <Label>Draw Ranges</Label>
